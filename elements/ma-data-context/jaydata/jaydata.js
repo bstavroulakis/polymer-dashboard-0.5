@@ -14505,8 +14505,8 @@ $data.Class.define('$data.StorageProviderLoaderBase', null, null, {
         var jaydataScript = document.querySelector('script[src$="jaydata.js"]');
         //if (jaydataScriptMin) return jaydataScriptMin.src.substring(0, jaydataScriptMin.src.lastIndexOf('/') + 1) + 'jaydataproviders/' + providerName + 'Provider.min.js';
         //else if (jaydataScript) return jaydataScript.src.substring(0, jaydataScript.src.lastIndexOf('/') + 1) + 'jaydataproviders/' + providerName + 'Provider.js';
-        //else 
-        return '/elements/ma-data-context/jaydata/jaydataproviders/' + providerName + 'Provider.js';
+        //else
+        return '/PolymerDashboard/elements/ma-data-context/jaydata/jaydataproviders/' + providerName + 'Provider.js';
     },
     loadScript: function (url, currentProvider, callback) {
         if (!url){

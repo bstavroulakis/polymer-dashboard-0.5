@@ -39,7 +39,7 @@
                     return;
                 }
                 
-                var user = this.context.db.Users.add(authModel);
+                var user = this.$.context.db.Users.add(authModel);
                 this.$.context.db.saveChanges(function() {
                     self.createSession(user.Id);
                     callback(user, null, args);

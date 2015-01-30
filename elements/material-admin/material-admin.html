@@ -23,7 +23,7 @@
 <polymer-element name="material-admin">
   <template>
     <ma-data-context id="context"></ma-data-context>
-    <ma-config-repo id="maConfigRepo" context="this.context"></ma-config-repo>
+    <ma-config-repo id="maConfigRepo" context="{{this.context}}"></ma-config-repo>
     <flatiron-director route="{{route}}" autoHash></flatiron-director>
     <ma-drawer horizontal layout rightDrawer="false" drawerWidth="200px" headerImg="/images/bg/md-10.jpg">
       <material-admin-drawer route="{{route}}" pages="{{pages}}"></material-admin-drawer>
@@ -61,4 +61,4 @@
       }
     });
   </script>
-  </polymer>
+  </polymer-element>
