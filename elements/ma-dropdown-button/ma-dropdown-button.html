@@ -1,0 +1,24 @@
+  <polymer-element name="ma-dropdown-button" extends="paper-icon-button" relative on-tap="{{toggle}}" noink>
+  <template>
+      <style>
+          :host{
+              z-index:auto;
+          }
+          :content{
+            color:#000000;
+          }
+      </style>
+    <shadow></shadow>
+    <content></content>
+  </template>
+  <script>
+    Polymer({
+      toggle: function() {
+        if (!this.dropdown) {
+          this.dropdown = this.querySelector('paper-dropdown');
+        }
+        this.dropdown && this.dropdown.toggle();
+      }
+    });
+  </script>
+  </polymer-element>  

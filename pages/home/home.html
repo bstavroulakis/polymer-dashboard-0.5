@@ -1,0 +1,20 @@
+<polymer-element name="ma-page-home">
+    <template>
+        <ma-grid>
+            <ma-grid-item large="8" medium="12" small="24">
+                <ma-box>
+                    <div body>
+                        <paper-input label="Name" value="{{loginModel.Email}}"></paper-input>
+                        <paper-input label="Email" value="{{loginModel.Email}}"></paper-input>
+                        <paper-input label="Password" value="{{loginModel.Email}}"></paper-input>
+                    </div>
+                </ma-box>
+            </ma-grid-item>
+        </ma-grid>
+    </template>
+    <script>
+        Polymer('ma-page-home', {
+            ready: function() {}
+        });
+    </script>
+</polymer-element>

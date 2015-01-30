@@ -1,0 +1,35 @@
+<link rel="import" href="../../elements/ma-box/ma-box.html" />
+<link rel="import" href="../../elements/ma-repos/task-repo.html">
+<link rel="import" href="../../elements/ma-list/ma-list.html">
+<link rel="import" href="../../pages/tasks/task-list-item.html">
+<polymer-element name="ma-page-tasks">
+    <template>
+
+        <task-repo id="repo"></task-repo>
+        <ma-box class="content-color">
+            <div head>Tasks List</div>
+            <div body>
+                <ma-list id="maList" itemElement="task-list-item"></ma-list>
+            </div>
+        </ma-box>
+        <paper-fab icon="add" role="button" class="fabBtn" on-tap="{{saveUser}}"></paper-fab>
+    </template>
+    <script>
+        Polymer('ma-page-tasks', {
+            ready: function() {
+                this.$.repo.getTasks(this.taskListCallback, this.$.maList.pagination, this);
+            },
+            taskListCallback: function(taskList, total, self) {
+                self.$.maList.pagination.total = total;
+                //self.$.maList.list = [];
+                for (var key in taskList) {
+                    self.$.maList.list.push({
+                        Details: taskList[key].Details,
+                        DeadLine: taskList[key].DeadLine,
+                        CompleteDateTime: taskList[key].CompleteDateTime
+                    });
+                }
+            }
+        });
+    </script>
+</polymer-element>

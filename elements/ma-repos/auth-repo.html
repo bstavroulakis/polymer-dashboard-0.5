@@ -1,0 +1,77 @@
+<link rel="import" href="../ma-data-repo/ma-data-repo.html" />
+<polymer-element name="auth-repo" extends="ma-data-repo">
+    <script>
+        Polymer('auth-repo', {
+            cookieName: "maAuth",
+            authModel: {},
+            ready: function() {
+                this.authModel = this.$.context.getJSON(this.$.context.models.User);
+            },
+            login: function(callback, authModel, args) {
+                var self = this;
+                var validation = this.$.context.validateJSON(this.$.context.models.User, authModel);
+                
+                if(!validation.isValid){
+                    callback(false,validation.errors, args);
+                    return;
+                }
+                
+                this.$.context.db.Users.User.query(function(user) {
+                    user.Email == this.Email && user.Password == this.Password
+                }, authModel).then(function(user) {
+                    if(user.length > 0){
+                        self.createSession(user[0].Id);
+                        callback(user[0], null, args);
+                    }else{
+                        callback(false,null, args);     
+                    }
+                }).fail(function(){
+                    callback(false,null, args);    
+                });
+            },
+            register: function(callback, authModel, args) {
+                var self = this;
+                
+                var validation = this.$.context.validateJSON(this.$.context.models.User, authModel);
+                
+                if(!validation.isValid){
+                    callback(false,validation.errors, args);
+                    return;
+                }
+                
+                var user = this.context.db.Users.add(authModel);
+                this.$.context.db.saveChanges(function() {
+                    self.createSession(user.Id);
+                    callback(user, null, args);
+                }).fail(function(){
+                    callback(false, null, args);
+                });
+            },
+            session: function(returnSession) {
+                if (returnSession == null) {
+                    returnSession = false;
+                }
+                var name = this.cookieName + "=";
+                var ca = document.cookie.split(';');
+
+                for (var i = 0; i < ca.length; i++) {
+                    var c = ca[i];
+                    while (c.charAt(0) == ' ') c = c.substring(1);
+                    if (c.indexOf(name) != -1 && returnSession == false) return true;
+                    if (c.indexOf(name) != -1 && returnSession == true) return JSON.parse(c.substring(name.length, c.length));
+                }
+                return false;
+            },
+            createSession: function(id) {
+                var d = new Date();
+                var exdays = 10;
+                d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+                var expires = "expires=" + d.toUTCString() + "; path=/";
+                document.cookie = this.cookieName + "= {\"Id\" :" + id + "}" + "; " + expires;
+            },
+            deleteSession: function() {
+                document.cookie = this.cookieName + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/';
+            }
+        });
+    </script>
+</polymer-element>

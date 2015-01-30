@@ -1,0 +1,143 @@
+<link href="//fonts.googleapis.com/css?family=RobotoDraft:300,400,500|Source+Code+Pro:400,500,700" rel="stylesheet">
+
+<link rel="import" href="/elements/ma-page-dialog/ma-page-dialog.html" />
+<link rel="import" href="/elements/ma-utils/ma-utils.html" />
+<link rel="import" href="/bower_components/paper-ripple/paper-ripple.html" />
+<link rel="import" href="/bower_components/paper-toast/paper-toast.html" />
+<link rel="import" href="/elements/ma-repos/auth-repo.html" />
+<link rel="import" href="/bower_components/core-animated-pages/core-animated-pages.html" />
+<link rel="import" href="/bower_components/paper-tabs/paper-tabs.html" />
+
+<link rel="stylesheet" href="/elements/material-admin/material-admin.css" shim-shadowdom>
+<link rel="stylesheet" href="/elements/material-admin/material-admin-palette.css" shim-shadowdom>
+
+<polymer-element name="auth-dialog">
+    <template>
+        
+        <style>
+            .pages [body]{
+                padding:10px;
+                background-color:#ffffff;
+            }
+            .remember-me{
+                padding-left:10px;
+            }
+            .auth-btn{
+                margin-top:5px;
+            }
+            paper-input::shadow paper-input-decorator{
+                padding-top:0px;
+            }
+            paper-tab{
+                background-color:#f9f9f9;
+                color:#898989;
+            }
+            paper-tab.core-selected{
+                background-color:#ffffff;
+                color:#000000;
+            }
+        </style>
+        
+        <div>&nbsp;</div>
+        <auth-repo id="repo"></auth-repo>
+        <ma-utils id="maUtils"></ma-utils>
+
+        <ma-page-dialog id="page-top" headerImg="/images/bg/md-10.jpg">
+            <div header>
+                <h1 class="light-text-color">Material Admin</h1>
+            </div>
+        </ma-page-dialog>
+        
+        <ma-page-dialog id="page-top" class="light-text-color">
+            <div body>
+                <paper-tabs selected="{{selected}}" nobar>
+                    <paper-tab>Login</paper-tab>
+                    <paper-tab>Register</paper-tab>
+                </paper-tabs>
+            </div>
+        </ma-page-dialog>
+
+        <core-animated-pages class="pages" selected="{{selected}}" transitions="cross-fade-all hero-transition">
+            <ma-page-dialog>
+                <div body vertical layout>
+                    <paper-input label="Email" value="{{loginModel.Email}}" placeholder="label"></paper-input>
+                    <paper-input label="Password" value="{{loginModel.Password}}" placeholder="label"></paper-input>
+                    <core-label horizontal layout>
+                        <div>
+                            <paper-checkbox for></paper-checkbox>
+                        </div>
+                        <div class="remember-me">
+                            Remember Me
+                        </div>
+                    </core-label>
+                    <div class="auth-btn" horizontal layout end-justified>
+                        <paper-button class="default-primary-color" raised on-tap="{{login}}">Login</paper-button>
+                    </div>
+                </div>
+            </ma-page-dialog>
+            <ma-page-dialog>
+                <div body vertical layout>
+                    <paper-input label="Email" value="{{registerModel.Email}}" placeholder="label"></paper-input>
+                    <paper-input label="Password" value="{{registerModel.Password}}" placeholder="label"></paper-input>
+                    <div horizontal layout end-justified>
+                        <paper-button class="default-primary-color" raised on-tap="{{registerUser}}">Register</paper-button>
+                    </div>
+                </div>
+            </ma-page-dialog>
+
+        </core-animated-pages>
+        <paper-toast id="toastError" text=""></paper-toast>
+    </template>
+    <script>
+        Polymer('auth-dialog', {
+            loginModel: {},
+            registerModel: {},
+            selected: 0,
+            ready: function() {
+                if (this.$.repo.session()) {
+                    window.location = "/";
+                }
+                this.loginModel = this.$.maUtils.clone(this.$.repo.authModel);
+                this.registerModel = this.$.maUtils.clone(this.$.repo.authModel);
+            },
+            login: function() {
+                this.$.toastError.dismiss();
+                this.async(function() {
+                    this.$.repo.login(this.loginCallback, this.loginModel, this);
+                }, null, 200);
+            },
+            loginCallback: function(user, errors, self) {
+                if (user) {
+                    window.location = "/";
+                }
+                else {
+                    var errorVals = [];
+                    errors.forEach(function(err) {
+                        errorVals.push(err.error);
+                    });
+                    self.$.toastError.text = errorVals.join(', ');
+                    self.$.toastError.show();
+                }
+            },
+            registerUser: function() {
+                this.$.toastError.dismiss();
+                this.async(function() {
+                    this.$.repo.register(this.registerUserCallback, this.registerModel, this);
+                }, null, 200);
+            },
+            registerUserCallback: function(user, errors, self) {
+                if (user) {
+                    window.location = "/";
+                }
+                else {
+                    var errorVals = [];
+                    errors.forEach(function(err) {
+                        errorVals.push(err.error);
+                    });
+                    self.$.toastError.text = errorVals.join(', ');
+                    self.$.toastError.show();
+                }
+            }
+        });
+    </script>
+</polymer-element>

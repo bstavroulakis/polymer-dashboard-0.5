@@ -1,0 +1,17 @@
+<link rel="import" href="../ma-data-repo/ma-data-repo.html" />
+<polymer-element name="ma-config-repo" extends="ma-data-repo" attributes="context">
+    <script>
+        Polymer('ma-config-repo', {
+            ready: function() {},
+            getPages: function(callback, args) {
+                var self = this;
+                self.$.context.db
+                .Pages
+                .Page
+                .readAll().then(function(items) {
+                    callback(self.$.context.resultsToJSON(items), args);
+                });
+            }
+        });
+    </script>
+</polymer-element>

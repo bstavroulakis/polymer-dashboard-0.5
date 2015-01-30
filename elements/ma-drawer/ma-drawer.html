@@ -1,0 +1,130 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/core-toolbar/core-toolbar.html">
+<link rel="import" href="../../bower_components/core-drawer-panel/core-drawer-panel.html">
+<link rel="import" href="../../bower_components/core-header-panel/core-header-panel.html">
+<link rel="import" href="../../bower_components/core-item/core-item.html">
+<link rel="import" href="../../bower_components/core-menu/core-menu.html">
+<link rel="import" href="../../bower_components/core-menu/core-submenu.html">
+<link rel="import" href="../../bower_components/core-icon-button/core-icon-button.html">
+<link rel="import" href="../../bower_components/core-icons/social-icons.html">
+<link rel="import" href="../../bower_components/paper-fab/paper-fab.html">
+
+<polymer-element name="ma-drawer" extends="core-drawer-panel" attributes="headerImg">
+    <template>
+        <style>
+            core-header-panel /deep/ #dropShadow {
+                box-shadow: none;
+            }
+            .fancy-fab .drawer-fab {
+                position: absolute;
+                z-index: 1;
+                left: -25px;
+                top: 10px;
+            }
+            .drawer-opened{
+                box-shadow: 7px 0 10px rgba(0, 0, 0, 0.19);
+            }
+            .drawer-fab-pad {
+                padding-right: 5px;
+            }
+            .logo{
+                padding: 8px;
+                margin-bottom:1px;
+            }
+            #mainHeader{
+                background-size: 100%;
+                background-repeat: no-repeat;
+            }
+        </style>
+        <core-drawer-panel id="drawerPanel" rightDrawer="{{rightDrawer}}" drawerWidth="{{drawerWidth}}">
+            <div drawer class="{{ {'drawer-opened':drawerOpened && !mobileMode, 'neutral-color':true} | tokenList }}">
+                <h2 id="mainHeader" class="logo light-shadowed-color light-text-color">Material Admin</h2>
+                <div>
+                    <content select="material-admin-drawer"></content>
+                </div>
+            </div>
+            <core-header-panel main navigation>
+                <core-toolbar class="{{ {'fancy-fab':(drawerOpened && !mobileMode && !scrimDrawerOpened), 'default-primary-color':true, 'text-primary-color':true} | tokenList }}">
+                    <paper-fab class="drawer-fab" 
+                        mini icon="{{(drawerOpened && !mobileMode && !scrimDrawerOpened)?'arrow-back':'menu'}}" 
+                        on-tap="{{togglePanel}}"></paper-fab>
+                    <template if="{{drawerOpened && !mobileMode && !scrimDrawerOpened}}">
+                        <div class="drawer-fab-pad"></div>
+                    </template>
+                    <content select="material-admin-header"></content>
+                </core-toolbar>
+                <content select="material-admin-main"></content>
+            </core-header-panel>
+        </core-drawer-panel>
+    </template>
+    <script>
+        Polymer('ma-drawer', {
+            mobileMode: false,
+            drawerOpened: true,
+            scrimDrawerOpened: false,
+            headerImg:"",
+            narrowChanged: function() {
+                var selfObj = this;
+                this.async(function() {
+                    if (this.narrow) {
+                        this.mobileMode = true;
+                        this.drawerOpened = false;
+                    }
+                    else {
+                        this.mobileMode = false;
+                        this.drawerOpened = true;
+                    }
+                    this.scrimDrawerOpened = false;
+                    selfObj.hideShowScrimDisplay(false);
+                }, 0);
+            },
+            ready: function() {
+                var selfObj = this;
+                this.$.drawerPanel.addEventListener('core-drawer-panel-trackOpen', function(el) {
+                    if(!selfObj.drawerOpened){
+                        selfObj.hideShowScrimDisplay(false);
+                        selfObj.scrimDrawerOpened = true;
+                    }
+                });
+                this.$.drawerPanel.addEventListener('core-drawer-panel-trackClosed', function(el) {
+                    if(!selfObj.drawerOpened){
+                        selfObj.scrimDrawerOpened = false;
+                    }
+                });
+                this.$.drawerPanel.shadowRoot.querySelector("#scrim").addEventListener('tap', function(el) {
+                    if(!selfObj.drawerOpened){
+                        selfObj.scrimDrawerOpened = false;
+                        selfObj.$.drawerPanel.closeDrawer();
+                    }
+                });
+                if (this.$.drawerPanel.narrow) {
+                    this.drawerOpened = false;
+                    this.mobileMode = true;
+                }
+                this.hideShowScrimDisplay(true);
+                if (this.headerImg != "") {
+                    this.$.mainHeader.style.backgroundImage = "url('" + this.headerImg + "')";
+                }
+            },
+            togglePanel: function() {
+                this.drawerOpened = !this.drawerOpened;
+                if (this.mobileMode) {
+                    this.$.drawerPanel.openDrawer();
+                    this.hideShowScrimDisplay(false);
+                }
+                else {
+                    this.$.drawerPanel.narrow = !this.$.drawerPanel.narrow;
+                    this.hideShowScrimDisplay(true);
+                    this.$.drawerPanel.closeDrawer();
+                }
+            },
+            hideShowScrimDisplay:function(hide){
+                if(hide){
+                    this.$.drawerPanel.shadowRoot.querySelector("#scrim").style.display = 'none';
+                }else{
+                    this.$.drawerPanel.shadowRoot.querySelector("#scrim").style.display = 'block';
+                }
+            },
+        });
+    </script>
+</polymer-element>

@@ -1,0 +1,56 @@
+<polymer-element name="ma-list" tabindex="-1" attributes="itemElement">
+    <template>
+        <style>
+            ul,
+            li {
+                padding: 0;
+                margin: 0;
+                list-style-type: none;
+            }
+        </style>
+        <ul>
+            <template id="loop" repeat="{{item in list}}">
+                <li class="item"></li>
+            </template>
+        </ul>
+        <ul>
+            <template repeat="{{page in pageArr}}">
+                <li>{{page}}</li>
+            </template>
+        </ul>
+    </template>
+    <script>
+        Polymer('ma-list', {
+            list: [],
+            itemElement: "",
+            pagination: {
+                page: 1,
+                total: 0,
+                pageSize: 5
+            },
+            pageArr: [],
+            template: {},
+            paginationChanged: function() {
+                var self = this;
+                var totalPages = Math.ceil(self.pagination.total / self.pagination.pageSize);
+                for (var i = 1; i <= totalPages; i++) {
+                    self.pageArr.push(i);
+                }
+            },
+            ready: function() {
+                this.async(function() {
+                    if (this.itemElement != "") {
+                        var items = this.shadowRoot.querySelectorAll(".item");
+                        for (var i in items) {
+                            console.log(items[i]);
+                            items[i].innerHTML = "<" + this.itemElement + " item='{{" + items[i] + "}}'></" + this.itemElement + ">";
+                        }
+                    }
+                }, null, 0);
+            },
+            getTasks: function() {
+
+            }
+        });
+    </script>
+</polymer-element>

@@ -1,0 +1,60 @@
+<link rel="import" href="../ma-grid/ma-grid.html">
+<link rel="import" href="../../bower_components/core-animated-pages/core-animated-pages.html">
+<link rel="import" href="../../bower_components/flatiron-director/flatiron-director.html">
+<link rel="import" href="../../bower_components/core-ajax/core-ajax.html">
+<polymer-element name="material-admin-main" attributes="route,pages,page">
+    <template>
+        <style>
+            .main-container {
+                padding: 10px;
+            }
+            paper-shadow,
+            ::shadow paper-shadow {
+                margin: 10px;
+                padding: 10px;
+            }
+            core-animated-pages {
+                width: 100%;
+            }
+        </style>
+        <div class="main-container" horizontal layout>
+            <core-animated-pages id="pageWrapper" selected="{{route}}" valueattr="hash" transitions="slide-from-right">
+                <template repeat="{{p, i in pages}}">
+                    <section hash="{{p.Link}}" layout vertical>
+                        <div style="max-width:100%;">Loading...</div>
+                    </section>
+                </template>
+            </core-animated-pages>
+        </div>
+        <!--
+        <core-ajax id="pageAjax" url="{{routeUrl}}" handleAs="document" on-core-response="{{onResponse}}"></core-ajax>
+        -->
+    </template>
+    <script>
+        Polymer('material-admin-main', {
+            routeUrl: '',
+            page: {},
+            ready: function() {
+                this.pageChanged();
+            },
+            onResponse: function(e, detail, sender) {
+                //var pageWrapper = this.$.pageWrapper;
+                //this.injectBoundHTML(detail.response.querySelector("body").innerHTML, pageWrapper.selectedItem.firstElementChild);
+            },
+            pageChanged: function() {
+                var self = this;
+                self.async(function() {
+                    var selectedPage = self.$.pageWrapper.querySelector(".core-selected");
+                    Polymer.import([this.page.Url], function() {
+                        if (selectedPage != null) {
+                            selectedPage.innerHTML = "";
+                            var div = document.createElement("div");
+                            div.innerHTML = "<ma-page-" + self.page.Link + "></ma-page-" + self.page.Link + ">";
+                            selectedPage.appendChild(div.childNodes[0]);
+                        }
+                    });
+                }, null, 300);
+            }
+        });
+    </script>
+</polymer-element>

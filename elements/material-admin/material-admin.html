@@ -1,0 +1,64 @@
+<link href="//fonts.googleapis.com/css?family=RobotoDraft:300,400,500|Source+Code+Pro:400,500,700" rel="stylesheet">
+
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/paper-menu-button/paper-menu-button.html">
+<link rel="import" href="../../bower_components/paper-dropdown/paper-dropdown.html">
+<link rel="import" href="../../bower_components/core-collapse/core-collapse.html">
+<link rel="import" href="../../bower_components/core-icons/core-icons.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/paper-shadow/paper-shadow.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html" />
+<link rel="import" href="../ma-drawer/ma-drawer.html">
+<link rel="import" href="../ma-dropdown-button/ma-dropdown-button.html">
+<link rel="import" href="../material-admin/material-admin-header.html">
+<link rel="import" href="../material-admin/material-admin-drawer.html">
+<link rel="import" href="../material-admin/material-admin-main.html">
+
+<link rel="stylesheet" href="material-admin.css" shim-shadowdom>
+<link rel="stylesheet" href="material-admin-palette.css" shim-shadowdom>
+
+<script src="../ma-utils/ma-filters.js"></script>
+
+<polymer-element name="material-admin">
+  <template>
+    <ma-data-context id="context"></ma-data-context>
+    <ma-config-repo id="maConfigRepo" context="this.context"></ma-config-repo>
+    <flatiron-director route="{{route}}" autoHash></flatiron-director>
+    <ma-drawer horizontal layout rightDrawer="false" drawerWidth="200px" headerImg="/images/bg/md-10.jpg">
+      <material-admin-drawer route="{{route}}" pages="{{pages}}"></material-admin-drawer>
+      <material-admin-header route="{{route}}" page="{{page}}" flex horizontal layout></material-admin-header>
+      <material-admin-main route="{{route}}" pages="{{pages}}" page="{{page}}"></material-admin-main>
+    </ma-drawer>
+  </template>
+  <script>
+    Polymer('material-admin', {
+      route: "",
+      pages: [],
+      page: {},
+      ready: function() {
+        this.$.maConfigRepo.getPages(this.pagesCallback, this);
+      },
+      routeChanged: function() {
+        for (var key in this.pages) {
+          if (this.pages[key].Link == this.route.trim()) {
+            this.page = this.pages[key];
+            break;
+          }
+        }
+      },
+      pagesCallback: function(items, self) {
+        for (var i = 0; i <= items.length - 1; i++) {
+          self.pages.push(items[i]);
+        };
+        if (self.route.trim() == '') {
+          self.route = self.pages[0].Link;
+          self.page = self.pages[0];
+          location.hash = self.pages[0].Link;
+        }else{
+          self.routeChanged();
+        }
+      }
+    });
+  </script>
+  </polymer>

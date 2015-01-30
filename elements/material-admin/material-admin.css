@@ -1,0 +1,31 @@
+*,
+html /deep/ * {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+body {
+  font-size: 16px;
+  font-family: "RobotoDraft", Helvetica, Arial, sans-serif;
+  font-weight: 300;
+  line-height: 24px;
+  margin: 0;
+}
+body /deep/ h1 {
+  font-size: 30px;
+}
+body /deep/ h1,
+body /deep/ h2,
+body /deep/ h3,
+body /deep/ h4 {
+  font-weight: 300;
+  letter-spacing: -0.01em;
+  line-height: 48px;
+  margin: 0;
+}
+.fabBtn, html /deep/ .fabBtn {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+}

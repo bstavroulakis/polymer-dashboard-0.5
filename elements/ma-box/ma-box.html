@@ -1,0 +1,58 @@
+<polymer-element name="ma-box" attributes="fullimage">
+    <template>
+        <style>
+            :host {
+                display: block;
+                box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+                border-radius: 2px;
+                margin-left: 5px;
+                margin-right: 5px;
+            }
+            .head-inner {
+                display: block;
+                padding-left: 15px;
+            }
+            .body-inner {
+                display: block;
+                padding-left: 15px;
+                padding-right: 15px;
+            }
+            .fullimage{
+                min-height:150px;
+                text-align:bottom;
+                background-repeat:no-repeat;
+                background-size:cover;
+            }
+        </style>
+        <div id="wrapper">
+            <div id="boxHeader" class="head {{headClass}}">
+                <div class="head-inner">
+                <h3><content select="[head]"></content></h3>
+                </div>
+            </div>
+            <div id="boxBody" class="body">
+                <div class="body-inner">
+                <content select="[body]"></content>
+                </div>
+            </div>
+        </div>
+    </template>
+    <script>
+        Polymer('ma-box', {
+            headClass: "",
+            fullimage: "",
+            ready: function() {
+                if (this.querySelector('[head]') == null) {
+                    this.$.boxHeader.style.display = "none";
+                }
+                else {
+                    this.headClass = this.querySelector('[head]').className;
+                }
+                if (this.fullimage != "") {
+                    this.$.boxBody.style.backgroundImage = "url(\"" + this.fullimage + "\")";
+                    this.$.boxBody.className = "body fullimage text-primary-color";
+                }
+            }
+        });
+    </script>
+</polymer-element>

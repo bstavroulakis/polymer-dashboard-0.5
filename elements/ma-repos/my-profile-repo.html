@@ -1,0 +1,47 @@
+<link rel="import" href="../ma-data-repo/ma-data-repo.html" />
+<link rel="import" href="../ma-repos/auth-repo.html" />
+<polymer-element name="my-profile-repo" extends="ma-data-repo">
+    <template>
+        <auth-repo id="authRepo"></auth-repo>
+    </template>
+    <script>
+        Polymer('my-profile-repo', {
+            model: {},
+            userSession: {},
+            ready: function() {
+
+            },
+            getUser: function(callback, args) {
+                var self = this;
+                self.userSession = self.$.authRepo.session(true);
+                if (self.userSession) {
+                    self.$.context.db.Users.include("UserAddress").filter(function(user) {
+                        user.Id == this.Id
+                    }, self.userSession).toArray(function(user) {
+                        callback(user[0], args);
+                    });
+                }
+            },
+            saveUser: function(updatedUser, callback, args) {
+                var self = this;
+                var validation = this.$.context.validateJSON(this.$.context.models.User, updatedUser.initData);
+                if (!validation.isValid) {
+                    callback(false, validation.errors, args);
+                    return;
+                }
+                self.$.context.db.Users.User.query(function(user) {
+                    user.Id == this.Id
+                }, self.userSession).then(function(user) {
+                    self.$.context.db.Users.attachOrGet(user[0]);
+                    for (var key in updatedUser.initData) {
+                        user[0][key] = updatedUser.initData[key];
+                    };
+                    self.$.context.db.Users.saveChanges(function() {
+                        callback(user[0], null, args);
+                    });
+
+                });
+            }
+        });
+    </script>
+</polymer-element>

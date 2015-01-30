@@ -1,0 +1,27 @@
+<link rel="import" href="../ma-repos/ma-config-repo.html">
+<link rel="import" href="../ma-core-item-link/ma-core-item-link.html">
+<polymer-element name="material-admin-drawer" attributes="route, pages">
+    <template>
+        <style>
+            core-menu {
+                margin: 0;
+            }
+        </style>
+        <core-menu selected="{{route}}" valueattr="data-link">
+            <template repeat="{{pages}}">
+                <ma-core-item-link
+                    icon  = "{{Icon}}" 
+                    label = "{{Label}}" 
+                    data-link = "{{Link}}"
+                    link  = "{{Link | linkPath}}"
+                    color = "primary-text-color">
+                </ma-core-item-link>
+            </template>
+        </core-menu>
+    </template>
+    <script>
+        Polymer('material-admin-drawer', {
+            ready: function() {}
+        });
+    </script>
+</polymer-element>

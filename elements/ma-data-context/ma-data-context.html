@@ -1,0 +1,117 @@
+<polymer-element name="ma-data-context">
+<!--
+    <script src="jaydata/jaydatamodules/q.js"></script>
+    <script src="jaydata/jaydata.js"></script>
+    <script src="jaydata/jaydataproviders/IndexedDbProvider.js"></script>
+    <script src="jaydata/jaydataproviders/InMemoryProvider.js"></script>
+    <script src="jaydata/jaydatamodules/deferred.js"></script>
+    <script src="jaydata/jaydatamodules/qDeferred.js"></script>
+-->
+<script src="jaydata/jaydata.min.js"></script>
+<!--
+<script src="Models.js"></script>
+-->
+    <script src="models/Task.js"></script>
+    <script src="models/User.js"></script>
+    <script src="models/UserAddress.js"></script>
+    <script src="models/Mail.js"></script>
+    <script src="models/Page.js"></script>
+    <script src="models/Config.js"></script>
+    
+    <script src="seed/User.js"></script>
+    <script src="seed/UserAddress.js"></script>
+    <script src="seed/Mail.js"></script>
+    <script src="seed/Page.js"></script>
+    <script src="seed/Config.js"></script>
+    <script src="seed/Task.js"></script>
+    
+    <script>
+        Polymer('ma-data-context', {
+            db: {},
+            models: {
+                Mail: "Mail",
+                Task:"Task",
+                UserAddress:"UserAddress",
+                User: "User",
+                Page: "Page",
+                Config: "Config"
+            },
+            firstRun: false,
+            entities: [],
+            ready: function() {
+                var self = this;
+                var opts = {};
+                for (var key in this.models) {
+                    var name = this.models[key];
+                    $data.Entity.extend(name, MaModel[name].model);
+                    opts[MaModel[name].tableName] = {
+                        type: $data.EntitySet,
+                        elementType: name
+                    };
+                };
+                
+                $data.EntityContext.extend("MaDb", opts);
+                self.db = new MaDb({
+                    provider: 'webSql',
+                    databaseName: "MaDb",
+                    version:1
+                });
+                self.db.onReady(function() {
+                    self.db.Configs.Config.readAll()
+                        .then(function(configs) {
+                            if (configs.length == 0) {
+                                self.seedData();
+                            }
+                        });
+                });
+            },
+            seedData: function() {
+                var self = this;
+                for (var key in MaSeedData) {
+                    var name = key;
+                    var plural = MaModel[name].tableName;
+                    self.db[plural].addMany(MaSeedData[name]);
+                };
+                self.db.saveChanges(function() {
+                    window.location = "/";
+                });
+            },
+            getJSON: function(name) {
+                var ent = $data.Entity.extend(name, MaModel[name].model);
+                return new ent().toJSON();
+            },
+            validateJSON: function(name, model) {
+                var ent = $data.Entity.extend(name, MaModel[name].model);
+                var jayEntity = new ent();
+                for (var key in model) {
+                    if(model[key] == "")
+                        model[key] = null;
+                    jayEntity[key] = model[key];
+                }
+                var isValid = jayEntity.isValid();
+                var errors = [];
+                if (jayEntity.ValidationErrors != null && jayEntity.ValidationErrors.length > 0) {
+                    for (var key in jayEntity.ValidationErrors) {
+                        errors.push({
+                            name: jayEntity.ValidationErrors[key].PropertyDefinition.name,
+                            error: jayEntity.ValidationErrors[key].PropertyDefinition.error
+                        });
+                    }
+                }
+                return {
+                    isValid: isValid,
+                    errors: errors
+                };
+            },
+            resultsToJSON: function(items) {
+                var returnItems = [];
+                for (var key in items) {
+                    if (items[key].hasOwnProperty("initData")) {
+                        returnItems.push(items[key].initData);
+                    }
+                }
+                return returnItems;
+            }
+        });
+    </script>
+</polymer-element>

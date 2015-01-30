@@ -1,0 +1,26 @@
+<link rel="import" href="../../bower_components/core-item/core-item.html">
+
+<polymer-element name="ma-core-item-link" attributes="label icon src link color" horizontal center layout extends="core-item">
+    <template>
+        <style>
+            core-item {
+                padding: 5px;
+            }
+            a {
+                display: block;
+            }
+            :host(.core-selected) {
+                font-weight: 500;
+            }
+        </style>
+        <a href="{{link}}" class="{{color}}">
+            <core-item icon="{{icon}}" label="{{label}}" src="{{src}}"></core-item>
+            <content></content>
+        </a>
+    </template>
+    <script>
+        Polymer('ma-core-item-link', {
+            link: ""
+        });
+    </script>
+</polymer-element>

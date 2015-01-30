@@ -1,0 +1,28 @@
+<link rel="import" href="../../elements/ma-grid/ma-grid-item.html" />
+<link href="ma-grid-core.css" rel="stylesheet" />
+<link href="ma-grid-units.css" rel="stylesheet" />
+<link href="ma-grid-responsive.css" rel="stylesheet" />
+<polymer-element name="ma-grid">
+    <template>
+        <style>
+            :host,
+            .ma-g {
+                width: 100%;
+            }
+        </style>
+        <div class="ma-g">
+            <content></content>
+        </div>
+    </template>
+    <script>
+        Polymer('ma-grid', {
+            ready: function() {
+                var items = this.querySelectorAll("ma-grid-item");
+                for (var key in items) {
+                    var item = items[key];
+                    item.className = "ma-u-xl-" + item.large + "-24 ma-u-lg-" + item.large + "-24 ma-u-md-" + item.medium + "-24 ma-u-sm-" + item.small + "-24";
+                };
+            }
+        });
+    </script>
+</polymer-element>
