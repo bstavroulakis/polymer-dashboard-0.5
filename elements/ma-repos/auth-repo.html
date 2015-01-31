@@ -1,22 +1,25 @@
 <link rel="import" href="../ma-data-repo/ma-data-repo.html" />
-<polymer-element name="auth-repo" extends="ma-data-repo">
+<polymer-element name="auth-repo">
+    <template>
+        <ma-data-repo id="repo"></ma-data-repo>
+    </template>
     <script>
         Polymer('auth-repo', {
             cookieName: "maAuth",
             authModel: {},
             ready: function() {
-                this.authModel = this.$.context.getJSON(this.$.context.models.User);
+                this.$.repo.setupContext();
+                this.authModel = this.$.repo.context.getJSON(this.$.repo.context.models.User);
             },
             login: function(callback, authModel, args) {
                 var self = this;
-                var validation = this.$.context.validateJSON(this.$.context.models.User, authModel);
+                var validation = this.$.repo.context.validateJSON(this.$.repo.context.models.User, authModel);
                 
                 if(!validation.isValid){
                     callback(false,validation.errors, args);
                     return;
                 }
-                
-                this.$.context.db.Users.User.query(function(user) {
+                this.$.repo.context.db.Users.User.query(function(user) {
                     user.Email == this.Email && user.Password == this.Password
                 }, authModel).then(function(user) {
                     if(user.length > 0){
@@ -31,16 +34,13 @@
             },
             register: function(callback, authModel, args) {
                 var self = this;
-                
-                var validation = this.$.context.validateJSON(this.$.context.models.User, authModel);
-                
+                var validation = this.$.repo.context.validateJSON(this.$.repo.context.models.User, authModel);
                 if(!validation.isValid){
                     callback(false,validation.errors, args);
                     return;
                 }
-                
-                var user = this.$.context.db.Users.add(authModel);
-                this.$.context.db.saveChanges(function() {
+                var user = this.$.repo.context.db.Users.add(authModel);
+                this.$.repo.context.db.saveChanges(function() {
                     self.createSession(user.Id);
                     callback(user, null, args);
                 }).fail(function(){

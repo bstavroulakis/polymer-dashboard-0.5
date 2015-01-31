@@ -15,6 +15,11 @@
                     errorVals.push(err.error);
                 });
                 return errorVals.join(', ');
+            },
+            getBaseUrl:function(){
+                var re = /(.*\/)(.*\.html)/;
+                var baseURL = document.URL.split(re)[1].split('pages/')[0];
+                return baseURL;
             }
         });
     </script>

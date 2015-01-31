@@ -1,9 +1,23 @@
-<link rel="import" href="../ma-data-context/ma-data-context.html" />
-<polymer-element name="ma-data-repo" attributes="context">
-    <template>
-        <ma-data-context id="context"></ma-data-context>
-    </template>
+<link rel="import" href="../../elements/ma-utils/ma-utils.html">
+<link rel="import" href="../../elements/ma-data-context/ma-data-context.html">
+<polymer-element name="ma-data-repo">
     <script>
-        Polymer('ma-data-repo', {});
+        Polymer('ma-data-repo', {
+            context: null,
+            attached:function() {
+                this.setupContext();
+            },
+            setupContext:function(){
+                var self = this;
+                if(!window.document.querySelector("#maDataContext")){
+                    var div = document.createElement("div");
+                    div.innerHTML = "<ma-data-context id='maDataContext'></ma-data-context>";
+                    window.document.body.appendChild(div.childNodes[0]);
+                    self.context = window.document.querySelector("#maDataContext");
+                }else{
+                    self.context = window.document.querySelector("#maDataContext");
+                }
+            }
+        });
     </script>
 </polymer-element>

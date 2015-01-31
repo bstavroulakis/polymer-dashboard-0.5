@@ -42,13 +42,13 @@
         <auth-repo id="repo"></auth-repo>
         <ma-utils id="maUtils"></ma-utils>
 
-        <ma-page-dialog id="page-top" headerImg="/images/bg/md-10.jpg">
+        <ma-page-dialog headerImg="/images/bg/md-10.jpg">
             <div header>
                 <h1 class="light-text-color">Material Admin</h1>
             </div>
         </ma-page-dialog>
         
-        <ma-page-dialog id="page-top" class="light-text-color">
+        <ma-page-dialog class="light-text-color">
             <div body>
                 <paper-tabs selected="{{selected}}" nobar>
                     <paper-tab>Login</paper-tab>
@@ -95,7 +95,7 @@
             selected: 0,
             ready: function() {
                 if (this.$.repo.session()) {
-                    window.location = "/";
+                    window.location = this.$.maUtils.getBaseUrl();
                 }
                 this.loginModel = this.$.maUtils.clone(this.$.repo.authModel);
                 this.registerModel = this.$.maUtils.clone(this.$.repo.authModel);
@@ -108,7 +108,7 @@
             },
             loginCallback: function(user, errors, self) {
                 if (user) {
-                    window.location = "/";
+                    window.location = self.$.maUtils.getBaseUrl();
                 }
                 else {
                     var errorVals = [];
@@ -127,7 +127,7 @@
             },
             registerUserCallback: function(user, errors, self) {
                 if (user) {
-                    window.location = "/";
+                    window.location = self.$.maUtils.getBaseUrl();
                 }
                 else {
                     var errorVals = [];

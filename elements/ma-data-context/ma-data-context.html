@@ -1,12 +1,14 @@
 <polymer-element name="ma-data-context">
-
+    <template>
+        <ma-utils id="utils"></ma-utils>
+    </template>
     <script src="jaydata/jaydatamodules/q.js"></script>
     <script src="jaydata/jaydata.js"></script>
     <script src="jaydata/jaydataproviders/IndexedDbProvider.js"></script>
     <script src="jaydata/jaydataproviders/InMemoryProvider.js"></script>
     <script src="jaydata/jaydatamodules/deferred.js"></script>
     <script src="jaydata/jaydatamodules/qDeferred.js"></script>
-
+    <script src="jaydata/jaydataproviders/SqLiteProvider.js"></script>
 <!--
 <script src="Models.js"></script>
 -->
@@ -72,7 +74,7 @@
                     self.db[plural].addMany(MaSeedData[name]);
                 };
                 self.db.saveChanges(function() {
-                    window.location = "/";
+                    window.location = this.$.utils.getBaseUrl();
                 });
             },
             getJSON: function(name) {
