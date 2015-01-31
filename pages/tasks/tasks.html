@@ -2,7 +2,8 @@
 <link rel="import" href="../../elements/ma-repos/task-repo.html">
 <link rel="import" href="../../elements/ma-list/ma-list.html">
 <link rel="import" href="../../pages/tasks/task-list-item.html">
-        <link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html">
+
 <polymer-element name="ma-page-tasks">
     <template>
         <link rel="stylesheet" href="tasks.css">
@@ -28,6 +29,7 @@
         Polymer('ma-page-tasks', {
             list:[],
             ready: function() {
+                this.list = [];
                 this.$.repo.getTasks(this.taskListCallback, this.$.maList.pagination, this);
             },
             taskListCallback: function(taskList, total, self) {

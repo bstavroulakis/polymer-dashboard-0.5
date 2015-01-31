@@ -1,0 +1,32 @@
+<link rel="import" href="../ma-data-repo/ma-data-repo.html" />
+<link rel="import" href="../ma-repos/auth-repo.html" />
+<polymer-element name="task-repo">
+    <template>
+        <ma-data-repo id="repo"></ma-data-repo>
+        <auth-repo id="authRepo"></auth-repo>
+    </template>
+    <script>
+        Polymer('task-repo', {
+            userSession: {},
+            ready: function() {
+                this.$.repo.setupContext();
+                this.userSession = this.$.authRepo.session(true);
+            },
+            getTasks: function(callback, pagination, callbackSelf) {
+                var self = this;
+                self.$.repo.context.db.Mails.include("User")
+                        .orderBy(function(task) {
+                            return task.DeadLine
+                        })
+                        .filter(function(user) {
+                            user.User.Id == this.Id
+                        }, self.userSession).toArray(function(items) {
+                            pagination.total = items.length;
+                            var startElement = (pagination.page - 1) * pagination.pageSize;
+                            items = items.slice(startElement, startElement + pagination.pageSize);
+                            callback(self.$.repo.context.resultsToJSON(items), pagination.total, callbackSelf);
+                        });
+            }
+        });
+    </script>
+</polymer-element>

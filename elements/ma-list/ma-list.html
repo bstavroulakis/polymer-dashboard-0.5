@@ -20,10 +20,10 @@
             paginationChanged: function() {
                 var self = this;
                 var totalPages = Math.ceil(self.pagination.total / self.pagination.pageSize);
+                self.pageArr = [];
                 for (var i = 1; i <= totalPages; i++) {
                     self.pageArr.push(i);
                 }
-                console.log(totalPages);
             },
             ready:function(){
                 this.paginationChanged();

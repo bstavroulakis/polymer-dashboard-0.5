@@ -1,8 +1,4 @@
-
-
 (function(MaModel) {
-
-    var asdadasdsd = "private";
 
     MaModel.Mail = {
         tableName: "Mails",
@@ -12,15 +8,18 @@
                 key: true,
                 computed: true
             },
-            Email: {
+            Title: {
                 type: String,
                 required: true,
                 maxLength: 200
             },
-            Password: {
+            Message: {
                 type: String,
                 required: true,
                 maxLength: 50
+            },
+            SentDate:{
+                type: "datetime"
             }
         }
     }
