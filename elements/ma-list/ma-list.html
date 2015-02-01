@@ -1,4 +1,4 @@
-<polymer-element name="ma-list" tabindex="-1" attributes="itemElement">
+<polymer-element name="ma-list">
     <template>
         <content></content>
         <ul>
@@ -15,6 +15,9 @@
                 page: 1,
                 total: 0,
                 pageSize: 5
+            },
+            observe: {
+                'pagination.total': 'paginationChanged'
             },
             pageArr: [],
             paginationChanged: function() {

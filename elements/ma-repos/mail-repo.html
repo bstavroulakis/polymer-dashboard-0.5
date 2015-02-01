@@ -1,20 +1,20 @@
 <link rel="import" href="../ma-data-repo/ma-data-repo.html" />
 <link rel="import" href="../ma-repos/auth-repo.html" />
-<polymer-element name="task-repo">
+<polymer-element name="mail-repo">
     <template>
         <ma-data-repo id="repo"></ma-data-repo>
         <auth-repo id="authRepo"></auth-repo>
     </template>
     <script>
-        Polymer('task-repo', {
+        Polymer('mail-repo', {
             userSession: {},
             ready: function() {
                 this.$.repo.setupContext();
                 this.userSession = this.$.authRepo.session(true);
             },
-            getTasks: function(callback, pagination, callbackSelf) {
+            getMails: function(callback, pagination, callbackSelf) {
                 var self = this;
-                self.$.repo.context.db.Mails.include("User")
+                /*self.$.repo.context.db.Mails.include("User")
                         .orderBy(function(task) {
                             return task.DeadLine
                         })
@@ -25,7 +25,7 @@
                             var startElement = (pagination.page - 1) * pagination.pageSize;
                             items = items.slice(startElement, startElement + pagination.pageSize);
                             callback(self.$.repo.context.resultsToJSON(items), pagination.total, callbackSelf);
-                        });
+                        });*/
             }
         });
     </script>

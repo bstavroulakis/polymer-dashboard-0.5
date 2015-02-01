@@ -17,6 +17,7 @@
                 width: 100%;
             }
         </style>
+        <ma-utils id="utils"></ma-utils>
         <div class="main-container" horizontal layout>
             <core-animated-pages id="pageWrapper" selected="{{route}}" valueattr="hash" transitions="slide-from-right">
                 <template repeat="{{p, i in pages}}">
@@ -26,9 +27,6 @@
                 </template>
             </core-animated-pages>
         </div>
-        <!--
-        <core-ajax id="pageAjax" url="{{routeUrl}}" handleAs="document" on-core-response="{{onResponse}}"></core-ajax>
-        -->
     </template>
     <script>
         Polymer('material-admin-main', {
@@ -37,22 +35,23 @@
             ready: function() {
                 this.pageChanged();
             },
-            onResponse: function(e, detail, sender) {
-                //var pageWrapper = this.$.pageWrapper;
-                //this.injectBoundHTML(detail.response.querySelector("body").innerHTML, pageWrapper.selectedItem.firstElementChild);
-            },
             pageChanged: function() {
                 var self = this;
                 self.async(function() {
                     var selectedPage = self.$.pageWrapper.querySelector(".core-selected");
-                    Polymer.import([this.page.Url], function() {
-                        if (selectedPage != null) {
-                            selectedPage.innerHTML = "";
-                            var div = document.createElement("div");
-                            div.innerHTML = "<ma-page-" + self.page.Link + "></ma-page-" + self.page.Link + ">";
-                            selectedPage.appendChild(div.childNodes[0]);
-                        }
-                    });
+                    if(selectedPage == null)
+                        return;
+                    var pageElement = selectedPage.querySelector("ma-page-" + self.page.Link);
+                    if(pageElement == null) {
+                        Polymer.import([self.$.utils.getBaseUrl() + this.page.Url.replace(/^\//, '')], function () {
+                            if (selectedPage != null) {
+                                selectedPage.innerHTML = "";
+                                var div = document.createElement("div");
+                                div.innerHTML = "<ma-page-" + self.page.Link + "></ma-page-" + self.page.Link + ">";
+                                selectedPage.appendChild(div.childNodes[0]);
+                            }
+                        });
+                    }
                 }, null, 300);
             }
         });

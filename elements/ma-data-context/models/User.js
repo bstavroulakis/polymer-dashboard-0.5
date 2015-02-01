@@ -42,6 +42,11 @@
                 type: Array,
                 elementType: "Task",
                 inverseProperty: "User"
+            },
+            MailUsers:{
+                type:"Array",
+                elementType:"MailUser",
+                inverseProperty:"User"
             }
         }
     };

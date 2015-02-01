@@ -3,6 +3,7 @@
 <link rel="import" href="../../elements/ma-list/ma-list.html">
 <link rel="import" href="../../pages/tasks/task-list-item.html">
 <link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../../elements/ma-repos/mail-repo.html">
 
 <polymer-element name="ma-page-mails">
     <template>
@@ -25,7 +26,7 @@
         <paper-fab icon="add" role="button" class="fabBtn" on-tap="{{newMail}}"></paper-fab>
     </template>
     <script>
-        Polymer('ma-page-tasks', {
+        Polymer('ma-page-mails', {
             list:[],
             ready: function() {
                 this.list = [];

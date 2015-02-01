@@ -11,15 +11,20 @@
             Title: {
                 type: String,
                 required: true,
-                maxLength: 200
+                maxLength: 100
             },
             Message: {
                 type: String,
                 required: true,
-                maxLength: 50
+                maxLength: 300
             },
             SentDate:{
                 type: "datetime"
+            },
+            MailUsers:{
+                type:"Array",
+                elementType:"MailUser",
+                inverseProperty:"Mail"
             }
         }
     }
