@@ -16,7 +16,8 @@
                         <template repeat="{{item in list}}">
                             <li>
                                 <paper-checkbox type="checkbox"></paper-checkbox>
-                                {{item.Details}}
+                                {{item.Title}}
+                                {{item.SentDate}}
                             </li>
                         </template>
                     </ul>
@@ -36,9 +37,9 @@
                 self.$.maList.pagination.total = total;
                 for (var key in list) {
                     self.list.push({
-                        Details: list[key].Details,
-                        DeadLine: list[key].DeadLine,
-                        CompleteDateTime: list[key].CompleteDateTime
+                        Title: list[key].Title,
+                        Message: list[key].Message,
+                        SentDate: list[key].SentDate
                     });
                 }
             }

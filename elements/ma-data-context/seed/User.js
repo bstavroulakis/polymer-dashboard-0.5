@@ -11,9 +11,6 @@
             "Country": "Greece",
             "ZipCode": "123456"
         },
-        MailUsers:[{
-          Mail:{Title:"Donec semper sapien a libero.",Message:"Aenean fermentum. Donec ut mauris eget massa tempor convallis. Nulla neque libero, convallis eget, eleifend luctus, ultricies eu, nibh.",SentDate:",1/30/2015 2:20"}
-        }],
         Tasks: [{
             Details: "Call Julie for meeting",
             CompletedDateTime: null,

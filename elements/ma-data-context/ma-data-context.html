@@ -61,7 +61,6 @@
                     version:1
                 });
                 self.db.onReady(function() {
-                    self.seedData();
                     self.db.Configs.Config.readAll()
                         .then(function(configs) {
                             if (configs.length == 0) {
@@ -72,22 +71,15 @@
             },
             seedData: function() {
                 var self = this;
+                var itemsWithConstraints = [];
                 for (var key in self.models) {
                     var name = key;
                     var plural = MaModel[name].tableName;
                     self.db[plural].addMany(MaSeedData[name]);
                 };
-                console.log(self.db);
-                var promise = self.db.saveChanges(function(){
-                    for (var key in self.models) {
-                        var name = key;
-                        var plural = MaModel[name].tableName;
-                        console.log(MaSeedData[name]);
-                    };
-                });
-                /*self.db.saveChanges(function() {
+                self.db.saveChanges(function() {
                     window.location = self.$.utils.getBaseUrl();
-                });*/
+                });
             },
             getJSON: function(name) {
                 var ent = $data.Entity.extend(name, MaModel[name].model);

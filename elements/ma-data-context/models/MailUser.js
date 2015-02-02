@@ -10,12 +10,16 @@
             },
             Mail:{
                 type:"Mail",
+                required:true,
                 inverseProperty:"MailUsers"
             },
             User:{
                 type:"User",
+                required:true,
                 inverseProperty:"MailUsers"
-            }
+            },
+            Mail__Id: { type: 'int' },
+            User__Id: { type: 'int' }
         }
     }
 

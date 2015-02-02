@@ -14,18 +14,22 @@
             },
             getMails: function(callback, pagination, callbackSelf) {
                 var self = this;
-                /*self.$.repo.context.db.Mails.include("User")
-                        .orderBy(function(task) {
-                            return task.DeadLine
+                self.$.repo.context.db.MailUsers.include("Mail").include("User")
+                        .orderBy(function(mail) {
+                            return mail.Mail.SentDate
                         })
-                        .filter(function(user) {
-                            user.User.Id == this.Id
+                        .filter(function(mail) {
+                            mail.User__Id == this.Id
                         }, self.userSession).toArray(function(items) {
                             pagination.total = items.length;
                             var startElement = (pagination.page - 1) * pagination.pageSize;
                             items = items.slice(startElement, startElement + pagination.pageSize);
-                            callback(self.$.repo.context.resultsToJSON(items), pagination.total, callbackSelf);
-                        });*/
+                            var returnItems = [];
+                            for(var i in items){
+                                returnItems.push(items[i].Mail);
+                            }
+                            callback(self.$.repo.context.resultsToJSON(returnItems), pagination.total, callbackSelf);
+                        });
             }
         });
     </script>

@@ -37,22 +37,25 @@
             },
             pageChanged: function() {
                 var self = this;
+                self.$.pageWrapper.style.display = "none";
                 self.async(function() {
                     var selectedPage = self.$.pageWrapper.querySelector(".core-selected");
                     if(selectedPage == null)
                         return;
                     var pageElement = selectedPage.querySelector("ma-page-" + self.page.Link);
-                    if(pageElement == null) {
+                    if(pageElement != null)
+                        pageElement.parentElement.removeChild(pageElement);
                         Polymer.import([self.$.utils.getBaseUrl() + this.page.Url.replace(/^\//, '')], function () {
                             if (selectedPage != null) {
                                 selectedPage.innerHTML = "";
                                 var div = document.createElement("div");
                                 div.innerHTML = "<ma-page-" + self.page.Link + "></ma-page-" + self.page.Link + ">";
                                 selectedPage.appendChild(div.childNodes[0]);
+                                self.$.pageWrapper.style.display = "";
                             }
                         });
-                    }
-                }, null, 300);
+
+                }, null, 0);
             }
         });
     </script>
