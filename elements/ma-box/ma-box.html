@@ -44,6 +44,7 @@
             ready: function() {
                 if (this.querySelector('[head]') == null) {
                     this.$.boxHeader.style.display = "none";
+                    this.$.wrapper.className = "noHead";
                 }
                 else {
                     this.headClass = this.querySelector('[head]').className;

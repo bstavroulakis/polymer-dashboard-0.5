@@ -4,23 +4,30 @@
 <link rel="import" href="../../pages/tasks/task-list-item.html">
 <link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="../../elements/ma-repos/mail-repo.html">
+<link rel="import" href="../../elements/ma-grid/ma-grid.html">
 
 <polymer-element name="ma-page-mails">
     <template>
         <mail-repo id="repo"></mail-repo>
         <ma-box class="content-color">
-            <div head>Mails</div>
             <div body>
                 <ma-list id="maList" list="{{list}}">
-                    <ul>
-                        <template repeat="{{item in list}}">
-                            <li>
+                    <template repeat="{{item in list}}">
+                        <ma-grid class="divider-color">
+                            <ma-grid-item large="2" medium="2" small="2">
                                 <paper-checkbox type="checkbox"></paper-checkbox>
+                            </ma-grid-item>
+                            <ma-grid-item large="4" medium="4" small="4">
+                                Bill
+                            </ma-grid-item>
+                            <ma-grid-item large="12" medium="12" small="12">
                                 {{item.Title}}
+                            </ma-grid-item>
+                            <ma-grid-item large="6" medium="6" small="6">
                                 {{item.SentDate}}
-                            </li>
-                        </template>
-                    </ul>
+                            </ma-grid-item>
+                        </ma-grid>
+                    </template>
                 </ma-list>
             </div>
         </ma-box>
@@ -30,13 +37,22 @@
         Polymer('ma-page-mails', {
             list:[],
             ready: function() {
-                this.list = [];
+                var self = this;
+                self.$.maList.pagination.page = 1;
+                this.$.maList.addEventListener("page-changed",function(){
+                    self.loadList();
+                });
+                this.loadList();
+            },
+            loadList:function(){
                 this.$.repo.getMails(this.mailListCallback, this.$.maList.pagination, this);
             },
             mailListCallback: function(list, total, self) {
                 self.$.maList.pagination.total = total;
+                self.list = [];
                 for (var key in list) {
                     self.list.push({
+                        IsSelected:false,
                         Title: list[key].Title,
                         Message: list[key].Message,
                         SentDate: list[key].SentDate

@@ -9,7 +9,6 @@
         <link rel="stylesheet" href="tasks.css">
         <task-repo id="repo"></task-repo>
         <ma-box class="content-color">
-            <div head>Tasks List</div>
             <div body>
                 <ma-list id="maList" list="{{list}}">
                     <ul>
@@ -29,11 +28,19 @@
         Polymer('ma-page-tasks', {
             list:[],
             ready: function() {
-                this.list = [];
+                var self = this;
+                self.$.maList.pagination.page = 1;
+                this.$.maList.addEventListener("page-changed",function(){
+                    self.loadList();
+                });
+                this.loadList();
+            },
+            loadList:function(){
                 this.$.repo.getTasks(this.taskListCallback, this.$.maList.pagination, this);
             },
             taskListCallback: function(taskList, total, self) {
                 self.$.maList.pagination.total = total;
+                self.list = [];
                 for (var key in taskList) {
                     self.list.push({
                         Details: taskList[key].Details,

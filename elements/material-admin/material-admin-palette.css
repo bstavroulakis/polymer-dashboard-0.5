@@ -8,7 +8,7 @@
 body, .neutral-color,html /deep/ .neutral-color{ background: #ececec; }
 .content-color, html /deep/ .content-color { background:#ffffff; }
 
-.divider-color, html /deep/ .divider-color { border:1px solid #B6B6B6; }
+.divider-color, html /deep/ .divider-color { border-bottom:1px solid #B6B6B6; }
 
 .text-primary-color, html /deep/ .text-primary-color { color: #FFFFFF; }
 .primary-text-color, html /deep/ .primary-text-color { color: #212121; }

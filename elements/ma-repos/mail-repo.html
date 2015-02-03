@@ -19,17 +19,29 @@
                             return mail.Mail.SentDate
                         })
                         .filter(function(mail) {
-                            mail.User__Id == this.Id
+                            mail.User__Id == this.Id && mail.IsSender == false
                         }, self.userSession).toArray(function(items) {
+
                             pagination.total = items.length;
                             var startElement = (pagination.page - 1) * pagination.pageSize;
                             items = items.slice(startElement, startElement + pagination.pageSize);
+
                             var returnItems = [];
                             for(var i in items){
                                 returnItems.push(items[i].Mail);
                             }
-                            callback(self.$.repo.context.resultsToJSON(returnItems), pagination.total, callbackSelf);
+
+                            self.$.repo.context.db.MailUsers.include("User").filter(function(){
+                                mail.Mail__Id == this.Id && mail.IsSender == true
+                            },returnItems).toArray(function(senders){
+                                for(var i in senders){
+                                    if(sender[i].Mail__Id == )
+                                }
+                            })
                         });
+            },
+            getMailsCallback:function(mails, initialCallback, pagination, initialCallbackSelf){
+                callback(self.$.repo.context.resultsToJSON(returnItems), pagination.total, callbackSelf);
             }
         });
     </script>

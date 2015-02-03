@@ -1,11 +1,28 @@
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-dropdown/paper-dropdown.html">
 <polymer-element name="ma-list">
     <template>
+        <link href="ma-list.css" rel="stylesheet">
+        <ma-grid class="divider-color">
+            <ma-grid-item large="1" medium="1" small="1">
+                <paper-checkbox class="selectAll" type="checkbox"></paper-checkbox>
+            </ma-grid-item>
+            <ma-grid-item large="23" medium="23" small="23">
+                <paper-button id="actionButton" on-tap="{{actionToggle}}">Actions</paper-button>
+                <paper-dropdown id="actionDropdown" on-tap="{{actionToggle}}">
+                    <paper-item>Delete</paper-item>
+                </paper-dropdown>
+            </ma-grid-item>
+        </ma-grid>
         <content></content>
-        <ul>
-            <template repeat="{{page in pageArr}}">
-                <li>{{page}}</li>
+        <ul class="pagination">
+            <template repeat="{{p in pageArr}}">
+                <li class="{{{'default-primary-color':(p==pagination.page)} | tokenList}}">
+                    <paper-button on-tap="{{changePage}}" data-page="{{p}}">{{p}}</paper-button>
+                </li>
             </template>
         </ul>
+        <div class="clearfix"></div>
     </template>
     <script>
         Polymer('ma-list', {
@@ -19,7 +36,14 @@
             observe: {
                 'pagination.total': 'paginationChanged'
             },
+            actionToggle:function(){
+                this.$.actionDropdown.toggle();
+            },
             pageArr: [],
+            changePage:function(event, detail, target){
+                this.pagination.page = target.dataset.page;
+                this.fire("page-changed");
+            },
             paginationChanged: function() {
                 var self = this;
                 var totalPages = Math.ceil(self.pagination.total / self.pagination.pageSize);

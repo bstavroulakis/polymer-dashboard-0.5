@@ -1,0 +1,32 @@
+ma-grid, ::content ma-grid{
+    margin-bottom: 5px;
+    display: block;
+    padding-top:5px;
+    padding-bottom:5px;
+}
+
+.selectAll{
+    padding-top:15px;
+}
+
+::content ul,
+li, ul, li {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+}
+
+.pagination li{
+    float:left;
+    display:inline-block;
+}
+
+.pagination{
+    margin-top:5px;
+    margin-bottom:5px;
+    display: inline-block;
+}
+
+.clearfix{
+    clear:both;
+}

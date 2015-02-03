@@ -19,7 +19,10 @@
                 inverseProperty:"MailUsers"
             },
             Mail__Id: { type: 'int' },
-            User__Id: { type: 'int' }
+            User__Id: { type: 'int' },
+            IsSender: {
+                type:"boolean"
+            }
         }
     }
 
