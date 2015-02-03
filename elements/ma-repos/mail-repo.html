@@ -30,18 +30,31 @@
                             for(var i in items){
                                 returnItems.push(items[i].Mail);
                             }
-
-                            self.$.repo.context.db.MailUsers.include("User").filter(function(){
-                                mail.Mail__Id == this.Id && mail.IsSender == true
-                            },returnItems).toArray(function(senders){
-                                for(var i in senders){
-                                    if(sender[i].Mail__Id == )
-                                }
-                            })
+                            console.log(returnItems);
+                            self.getMailsCallback(returnItems, callback, pagination, callbackSelf)
                         });
             },
-            getMailsCallback:function(mails, initialCallback, pagination, initialCallbackSelf){
-                callback(self.$.repo.context.resultsToJSON(returnItems), pagination.total, callbackSelf);
+            getMailsCallback:function(returnItems, callback, pagination, callbackSelf){
+                var self = this;
+                var mailIds = [];
+                for(var j in returnItems){
+                    mailIds.push(returnItems[j].Id);
+                }
+                self.$.repo.context.db.MailUsers.include("User").filter(function(mail){
+                    mail.Mail__Id in this > 0 && mail.IsSender == true
+                },mailIds).toArray(function(senders){
+                            for(var j in returnItems){
+                                for(var i=0; i<= senders.length -1;i++) {
+                                    if(senders[i].Mail__Id == returnItems[j].Id) {
+                                        var senderName = senders[i].User.Email;
+                                        returnItems[j].Sender = senderName;
+                                        break;
+                                    }
+                                }
+                            }
+                            callback((returnItems), pagination.total, callbackSelf);
+                        }
+                );
             }
         });
     </script>

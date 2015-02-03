@@ -1,12 +1,13 @@
-<polymer-element name="ma-box" attributes="fullimage">
+<polymer-element name="ma-box" attributes="fullImage, fit">
     <template>
         <style>
             :host {
                 display: block;
-                box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+                /*box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);*/
                 border-radius: 2px;
                 margin-left: 5px;
                 margin-right: 5px;
+                box-shadow: 0 0 2px rgba(0,0,0,.12),0 2px 4px rgba(0,0,0,.24);
             }
             .head-inner {
                 display: block;
@@ -17,14 +18,17 @@
                 padding-left: 15px;
                 padding-right: 15px;
             }
-            .fullimage{
+            .fullImage{
                 min-height:150px;
                 text-align:bottom;
                 background-repeat:no-repeat;
                 background-size:cover;
             }
+            .fit .body-inner{
+                padding:0;
+            }
         </style>
-        <div id="wrapper">
+        <div id="wrapper" class="{{ {'fit':fit, 'noHead':noHead,'content-color':true} | tokenList }}">
             <div id="boxHeader" class="head {{headClass}}">
                 <div class="head-inner">
                 <h3><content select="[head]"></content></h3>
@@ -40,18 +44,20 @@
     <script>
         Polymer('ma-box', {
             headClass: "",
-            fullimage: "",
+            fullImage: "",
+            fit:false,
+            noHead:false,
             ready: function() {
                 if (this.querySelector('[head]') == null) {
                     this.$.boxHeader.style.display = "none";
-                    this.$.wrapper.className = "noHead";
+                    this.noHead = true;
                 }
                 else {
                     this.headClass = this.querySelector('[head]').className;
                 }
-                if (this.fullimage != "") {
+                if (this.fullImage != "") {
                     this.$.boxBody.style.backgroundImage = "url(\"" + this.fullimage + "\")";
-                    this.$.boxBody.className = "body fullimage text-primary-color";
+                    this.$.boxBody.className = "body fullImage text-primary-color";
                 }
             }
         });

@@ -1,24 +1,30 @@
-<link rel="import" href="../../elements/ma-box/ma-box.html" />
+<link rel="import" href="../../elements/ma-box/ma-box.html"/>
 <link rel="import" href="../../elements/ma-repos/task-repo.html">
 <link rel="import" href="../../elements/ma-list/ma-list.html">
 <link rel="import" href="../../pages/tasks/task-list-item.html">
 <link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="../../elements/ma-repos/mail-repo.html">
 <link rel="import" href="../../elements/ma-grid/ma-grid.html">
+<link rel="import" href="../../bower_components/core-animation/core-animation.html">
 
 <polymer-element name="ma-page-mails">
     <template>
+        <style>
+            .details {
+                display: none;
+            }
+        </style>
         <mail-repo id="repo"></mail-repo>
-        <ma-box class="content-color">
+        <ma-box class="content-color" fit="true">
             <div body>
                 <ma-list id="maList" list="{{list}}">
                     <template repeat="{{item in list}}">
-                        <ma-grid class="divider-color">
+                        <ma-grid data-itemid="{{item.Id}}" class="divider-color" on-tap="{{showDetails}}">
                             <ma-grid-item large="2" medium="2" small="2">
                                 <paper-checkbox type="checkbox"></paper-checkbox>
                             </ma-grid-item>
                             <ma-grid-item large="4" medium="4" small="4">
-                                Bill
+                                {{item.Sender}}
                             </ma-grid-item>
                             <ma-grid-item large="12" medium="12" small="12">
                                 {{item.Title}}
@@ -27,35 +33,67 @@
                                 {{item.SentDate}}
                             </ma-grid-item>
                         </ma-grid>
+                        <div class="details" flex>
+                            <div layout horizontal center>
+                                <div flex>
+                                    <div>{{item.Title}}</div>
+                                    <div>{{item.SentDate}}</div>
+                                    <div>{{item.Sender}}</div>
+                                    <div>{{item.Message}}</div>
+                                </div>
+                            </div>
+                        </div>
                     </template>
+                    <div class="clearfix"></div>
                 </ma-list>
             </div>
         </ma-box>
+
+        <core-animation id="pageAnimation" duration="1000">
+            <core-animation-keyframe>
+                <core-animation-prop name="opacity" value="0">
+                </core-animation-prop>
+            </core-animation-keyframe>
+            <core-animation-keyframe>
+                <core-animation-prop name="opacity" value="1">
+                </core-animation-prop>
+            </core-animation-keyframe>
+        </core-animation>
+
         <paper-fab icon="add" role="button" class="fabBtn" on-tap="{{newMail}}"></paper-fab>
     </template>
     <script>
         Polymer('ma-page-mails', {
-            list:[],
-            ready: function() {
+            list: [],
+            player: {},
+            ready: function () {
                 var self = this;
                 self.$.maList.pagination.page = 1;
-                this.$.maList.addEventListener("page-changed",function(){
+                this.$.maList.addEventListener("page-changed", function () {
                     self.loadList();
                 });
                 this.loadList();
             },
-            loadList:function(){
+            showDetails: function (event, details, target) {
+                console.log("OK");
+                var a = this.$.pageAnimation;
+                a.target = target.parentElement.querySelector(".details");
+                this.player = a.play();
+            },
+            loadList: function () {
                 this.$.repo.getMails(this.mailListCallback, this.$.maList.pagination, this);
             },
-            mailListCallback: function(list, total, self) {
+            mailListCallback: function (list, total, self) {
                 self.$.maList.pagination.total = total;
                 self.list = [];
                 for (var key in list) {
                     self.list.push({
-                        IsSelected:false,
+                        Id: list[key].Id,
+                        IsSelected: false,
                         Title: list[key].Title,
                         Message: list[key].Message,
-                        SentDate: list[key].SentDate
+                        SentDate: list[key].SentDate,
+                        Sender: list[key].Sender
                     });
                 }
             }
