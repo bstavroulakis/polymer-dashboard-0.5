@@ -1,4 +1,4 @@
-<polymer-element name="ma-box" attributes="fullImage, fit">
+<polymer-element name="ma-box" attributes="fullImage, boxFit">
     <template>
         <style>
             :host {
@@ -24,11 +24,11 @@
                 background-repeat:no-repeat;
                 background-size:cover;
             }
-            .fit .body-inner{
+            .box-fit .body-inner{
                 padding:0;
             }
         </style>
-        <div id="wrapper" class="{{ {'fit':fit, 'noHead':noHead,'content-color':true} | tokenList }}">
+        <div id="wrapper" class="{{ {'box-fit':boxFit, 'noHead':noHead,'content-color':true} | tokenList }}">
             <div id="boxHeader" class="head {{headClass}}">
                 <div class="head-inner">
                 <h3><content select="[head]"></content></h3>
@@ -39,13 +39,14 @@
                 <content select="[body]"></content>
                 </div>
             </div>
+            <div class="clearfix"></div>
         </div>
     </template>
     <script>
         Polymer('ma-box', {
             headClass: "",
             fullImage: "",
-            fit:false,
+            boxFit:false,
             noHead:false,
             ready: function() {
                 if (this.querySelector('[head]') == null) {

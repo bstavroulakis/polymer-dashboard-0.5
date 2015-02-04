@@ -6,61 +6,79 @@
 <link rel="import" href="../../elements/ma-repos/mail-repo.html">
 <link rel="import" href="../../elements/ma-grid/ma-grid.html">
 <link rel="import" href="../../bower_components/core-animation/core-animation.html">
+<link rel="import" href="../../bower_components/core-animation/core-animation-group.html">
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../bower_components/paper-input/paper-autogrow-textarea.html">
 
 <polymer-element name="ma-page-mails">
     <template>
-        <style>
-            .details {
-                display: none;
-            }
-        </style>
+        <link rel="stylesheet" href="mails.css">
         <mail-repo id="repo"></mail-repo>
-        <ma-box class="content-color" fit="true">
-            <div body>
-                <ma-list id="maList" list="{{list}}">
-                    <template repeat="{{item in list}}">
-                        <ma-grid data-itemid="{{item.Id}}" class="divider-color" on-tap="{{showDetails}}">
-                            <ma-grid-item large="2" medium="2" small="2">
-                                <paper-checkbox type="checkbox"></paper-checkbox>
-                            </ma-grid-item>
-                            <ma-grid-item large="4" medium="4" small="4">
-                                {{item.Sender}}
-                            </ma-grid-item>
-                            <ma-grid-item large="12" medium="12" small="12">
-                                {{item.Title}}
-                            </ma-grid-item>
-                            <ma-grid-item large="6" medium="6" small="6">
-                                {{item.SentDate}}
-                            </ma-grid-item>
-                        </ma-grid>
-                        <div class="details" flex>
-                            <div layout horizontal center>
-                                <div flex>
-                                    <div>{{item.Title}}</div>
-                                    <div>{{item.SentDate}}</div>
-                                    <div>{{item.Sender}}</div>
-                                    <div>{{item.Message}}</div>
-                                </div>
+        <ma-list id="maList" list="{{list}}">
+            <template repeat="{{item in list}}">
+                <ma-box class="content-color" boxFit="true">
+                    <div body>
+                        <div class="{{{'item':true, 'divider-color':true, 'selected':item.selected}|tokenList}}">
+                            <ma-grid class="item-header" data-itemid="{{item.Id}}" on-tap="{{showDetails}}">
+                                <ma-grid-item large="2" medium="2" small="2">
+                                    <paper-checkbox type="checkbox"></paper-checkbox>
+                                </ma-grid-item>
+                                <ma-grid-item large="4" medium="4" small="4">
+                                    {{item.Sender}}
+                                </ma-grid-item>
+                                <ma-grid-item large="12" medium="12" small="12">
+                                    {{item.Title}}
+                                </ma-grid-item>
+                                <ma-grid-item large="6" medium="6" small="6">
+                                    {{item.SentDate}}
+                                </ma-grid-item>
+                            </ma-grid>
+                            <div class="item-details">
+                                <ma-grid>
+                                    <ma-grid-item large="18" medium="18" small="24">
+                                        <div class="title"><h2>{{item.Title}}</h2></div>
+                                    </ma-grid-item>
+                                    <ma-grid-item large="6" medium="6" small="24">
+                                        <div class="sentDate">{{item.SentDate}}</div>
+                                    </ma-grid-item>
+                                    <ma-grid-item large="24" medium="24" small="24">
+                                        <div class="sender">{{item.Sender}}</div>
+                                    </ma-grid-item>
+                                    <ma-grid-item large="24" medium="24" small="24">
+                                        <div class="message">{{item.Message}}</div>
+                                    </ma-grid-item>
+                                </ma-grid>
                             </div>
                         </div>
-                    </template>
-                    <div class="clearfix"></div>
-                </ma-list>
-            </div>
-        </ma-box>
+                    </div>
+                </ma-box>
+            </template>
+            <div class="clearfix"></div>
+        </ma-list>
 
-        <core-animation id="pageAnimation" duration="1000">
-            <core-animation-keyframe>
-                <core-animation-prop name="opacity" value="0">
-                </core-animation-prop>
-            </core-animation-keyframe>
-            <core-animation-keyframe>
-                <core-animation-prop name="opacity" value="1">
-                </core-animation-prop>
-            </core-animation-keyframe>
-        </core-animation>
 
-        <paper-fab icon="add" role="button" class="fabBtn" on-tap="{{newMail}}"></paper-fab>
+        <core-animation-group id="pageAnimation">
+            <core-animation>
+                <core-animation-keyframe>
+                    <core-animation-prop name="opacity" value="0">
+                    </core-animation-prop>
+                </core-animation-keyframe>
+                <core-animation-keyframe>
+                    <core-animation-prop name="opacity" value="1">
+                    </core-animation-prop>
+                </core-animation-keyframe>
+            </core-animation>
+        </core-animation-group>
+
+        <paper-dialog backdrop id="newItemPopup" heading="New Mail">
+                <paper-input floatingLabel="true" type="text" label="Receiver"></paper-input>
+                <paper-input floatingLabel="true" type="text" label="Title"></paper-input>
+                <paper-autogrow-textarea floatingLabel="true" label="Message">
+                    Message...
+                </paper-autogrow-textarea>
+            <paper-button>Send</paper-button>
+        </paper-dialog>
+        <paper-fab icon="add" role="button" class="fabBtn" on-tap="{{newItem}}"></paper-fab>
     </template>
     <script>
         Polymer('ma-page-mails', {
@@ -75,10 +93,22 @@
                 this.loadList();
             },
             showDetails: function (event, details, target) {
-                console.log("OK");
-                var a = this.$.pageAnimation;
-                a.target = target.parentElement.querySelector(".details");
-                this.player = a.play();
+                var animation = this.$.pageAnimation;
+                var itemId = target.dataset.itemid;
+                for (var i in this.list) {
+                    if (this.list[i].Id == itemId && !this.list[i].selected)
+                        this.list[i].selected = true;
+                    else
+                        this.list[i].selected = false;
+                }
+                target.parentElement.querySelector(".item-details").style.opacity = 0;
+                animation.target = target.parentElement.querySelector(".item-details");
+                animation.fill = "forwards";
+                animation.duration = 200;
+                this.player = animation.play();
+            },
+            newItem: function () {
+                this.$.newItemPopup.toggle();
             },
             loadList: function () {
                 this.$.repo.getMails(this.mailListCallback, this.$.maList.pagination, this);

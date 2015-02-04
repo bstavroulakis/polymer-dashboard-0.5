@@ -1,0 +1,37 @@
+.item-header{
+    cursor:pointer;
+}
+::shadow .actions, .item{
+    padding-top:5px;
+    padding-bottom:5px;
+    padding-left:15px;
+    padding-right:15px;
+}
+
+.sender{
+    font-size:80%;
+    font-style: italic;
+    opacity:0.5;
+}
+
+.selected .item-header{
+    opacity:0.5;
+}
+
+.selected{
+    box-shadow: 0 0 2px rgba(0,0,0,.12),0 2px 4px rgba(0,0,0,.24);
+    margin-top:20px;
+    margin-bottom:20px;
+}
+
+.item-details {
+    display:none;
+}
+.selected .item-details{
+    display: block;
+}
+
+#newItemPopup paper-input{
+    width:100%;
+    display:block;
+}

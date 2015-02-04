@@ -24,6 +24,11 @@ body /deep/ h4 {
   line-height: 48px;
   margin: 0;
 }
+
+body /deep/ .clearfix{
+    clear:both;
+}
+
 .fabBtn, html /deep/ .fabBtn {
   position: fixed;
   bottom: 25px;
