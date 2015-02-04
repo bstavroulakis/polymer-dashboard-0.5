@@ -1,5 +1,5 @@
-<link rel="import" href="../ma-data-repo/ma-data-repo.html" />
-<link rel="import" href="../ma-repos/auth-repo.html" />
+<link rel="import" href="../ma-data-repo/ma-data-repo.html"/>
+<link rel="import" href="../ma-repos/auth-repo.html"/>
 <polymer-element name="mail-repo">
     <template>
         <ma-data-repo id="repo"></ma-data-repo>
@@ -8,44 +8,86 @@
     <script>
         Polymer('mail-repo', {
             userSession: {},
-            ready: function() {
+            ready: function () {
                 this.$.repo.setupContext();
                 this.userSession = this.$.authRepo.session(true);
             },
-            getMails: function(callback, pagination, callbackSelf) {
+            sendMail: function (callback, mailModel, callbackSelf) {
+                var self = this;
+                var validation = this.$.repo.context.validateJSON(this.$.repo.context.models.Mail, mailModel);
+                if (!validation.isValid) {
+                    callback(false, validation.errors, callbackSelf);
+                    return;
+                }
+                ;
+                this.$.repo.context.db.Users.User.query(function (user) {
+                    user.Email == this.Receiver
+                }, mailModel).then(function (receiver) {
+
+                    if (receiver.length == 0) {
+                        callback(false, [{error: "The receiver wasn't found"}], callbackSelf);
+                        return;
+                    }
+
+                    var mail = new self.$.repo.context.db.Mails.Mail();
+                    mail.Title = mailModel.Title;
+                    mail.Message = mailModel.Message;
+                    mail.SentDate = (new Date()).getTime();
+                    self.$.repo.context.db.Mails.addMany([mail]);
+
+                    self.$.repo.context.db.saveChanges(function () {
+
+                        var senderUserMail = {};
+                        senderUserMail.User__Id = self.userSession.Id;
+                        senderUserMail.IsSender = true;
+                        senderUserMail.Mail__Id = mail.Id;
+                        var receiverUserMail = {};
+                        receiverUserMail.User__Id = receiver[0].Id;
+                        receiverUserMail.Mail__Id = mail.Id;
+                        receiverUserMail.IsSender = false;
+
+                        self.$.repo.context.db.MailUsers.addMany([senderUserMail, receiverUserMail]);
+                        self.$.repo.context.db.saveChanges(function () {
+                            callback(true, null, callbackSelf);
+                        });
+                    });
+                }).fail(function () {
+                    callback(false, null, callbackSelf);
+                });
+            },
+            getMails: function (callback, pagination, callbackSelf) {
                 var self = this;
                 self.$.repo.context.db.MailUsers.include("Mail").include("User")
-                        .orderBy(function(mail) {
+                        .orderByDescending(function (mail) {
                             return mail.Mail.SentDate
                         })
-                        .filter(function(mail) {
+                        .filter(function (mail) {
                             mail.User__Id == this.Id && mail.IsSender == false
-                        }, self.userSession).toArray(function(items) {
+                        }, self.userSession).toArray(function (items) {
 
                             pagination.total = items.length;
                             var startElement = (pagination.page - 1) * pagination.pageSize;
                             items = items.slice(startElement, startElement + pagination.pageSize);
 
                             var returnItems = [];
-                            for(var i in items){
+                            for (var i in items) {
                                 returnItems.push(items[i].Mail);
                             }
-                            console.log(returnItems);
                             self.getMailsCallback(returnItems, callback, pagination, callbackSelf)
                         });
             },
-            getMailsCallback:function(returnItems, callback, pagination, callbackSelf){
+            getMailsCallback: function (returnItems, callback, pagination, callbackSelf) {
                 var self = this;
                 var mailIds = [];
-                for(var j in returnItems){
+                for (var j in returnItems) {
                     mailIds.push(returnItems[j].Id);
                 }
-                self.$.repo.context.db.MailUsers.include("User").filter(function(mail){
+                self.$.repo.context.db.MailUsers.include("User").filter(function (mail) {
                     mail.Mail__Id in this > 0 && mail.IsSender == true
-                },mailIds).toArray(function(senders){
-                            for(var j in returnItems){
-                                for(var i=0; i<= senders.length -1;i++) {
-                                    if(senders[i].Mail__Id == returnItems[j].Id) {
+                }, mailIds).toArray(function (senders) {
+                            for (var j in returnItems) {
+                                for (var i = 0; i <= senders.length - 1; i++) {
+                                    if (senders[i].Mail__Id == returnItems[j].Id) {
                                         var senderName = senders[i].User.Email;
                                         returnItems[j].Sender = senderName;
                                         break;

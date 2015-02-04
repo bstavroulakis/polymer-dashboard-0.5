@@ -1,0 +1,80 @@
+<link rel="import" href="../../elements/ma-grid/ma-grid.html">
+<link rel="import" href="../../bower_components/core-animation/core-animation.html">
+<link rel="import" href="../../bower_components/core-animation/core-animation-group.html">
+<link rel="import" href="mail-popup.html">
+
+<polymer-element name="mail-item">
+    <template>
+        <link rel="stylesheet" href="mail-item.css">
+        <ma-box id="maBox{{item.Id}}" class="content-color" boxFit="true">
+            <div body class="{{{'item':true,'divider-color':true,'selected':item.selected} | tokenList}}">
+                <ma-grid class="item-header" data-itemid="{{item.Id}}" on-tap="{{showDetails}}">
+                    <ma-grid-item large="2" medium="2" small="2">
+                        <paper-checkbox type="checkbox" on-tap="{{checkboxSelected}}"></paper-checkbox>
+                    </ma-grid-item>
+                    <ma-grid-item large="4" medium="4" small="4">
+                        {{item.Sender}}
+                    </ma-grid-item>
+                    <ma-grid-item large="12" medium="12" small="12">
+                        {{item.Title}}
+                    </ma-grid-item>
+                    <ma-grid-item large="6" medium="6" small="6">
+                        {{item.SentDate}}
+                    </ma-grid-item>
+                </ma-grid>
+                <div class="item-details">
+                    <ma-grid>
+                        <ma-grid-item large="18" medium="18" small="24">
+                            <div class="title"><h2>{{item.Title}}</h2></div>
+                        </ma-grid-item>
+                        <ma-grid-item large="6" medium="6" small="24">
+                            <div class="sentDate">{{item.SentDate}}</div>
+                        </ma-grid-item>
+                        <ma-grid-item large="24" medium="24" small="24">
+                            <div class="sender">{{item.Sender}}</div>
+                        </ma-grid-item>
+                        <ma-grid-item large="24" medium="24" small="24">
+                            <div class="message">{{item.Message}}</div>
+                        </ma-grid-item>
+                    </ma-grid>
+                </div>
+            </div>
+        </ma-box>
+        <div class="clearfix"></div>
+        <core-animation-group id="pageAnimation">
+            <core-animation>
+                <core-animation-keyframe>
+                    <core-animation-prop name="opacity" value="0">
+                    </core-animation-prop>
+                </core-animation-keyframe>
+                <core-animation-keyframe>
+                    <core-animation-prop name="opacity" value="1">
+                    </core-animation-prop>
+                </core-animation-keyframe>
+            </core-animation>
+        </core-animation-group>
+    </template>
+    <script>
+        Polymer('mail-item', {
+            item: {},
+            showDetails: function (event, details, target) {
+                var animation = this.$.pageAnimation;
+                var itemId = target.dataset.itemid;
+                var willHide = false;
+                if (this.item.selected) {
+                    willHide = true;
+                }
+                this.fire('reset-list-selected');
+                if(!willHide)
+                    this.item.selected = true;
+                animation.target = target.parentElement.querySelector(".item-details");
+                animation.fill = "forwards";
+                animation.duration = 200;
+                this.player = animation.play();
+            },
+            checkboxSelected: function (event) {
+                event.stopPropagation();
+            }
+        });
+    </script>
+</polymer-element>

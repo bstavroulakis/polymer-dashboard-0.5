@@ -5,13 +5,17 @@ html /deep/ * {
   box-sizing: border-box;
   -webkit-tap-highlight-color: transparent;
 }
-body {
-  font-size: 16px;
+body , body /deep/ *{
   font-family: "RobotoDraft", Helvetica, Arial, sans-serif;
-  font-weight: 300;
-  line-height: 24px;
-  margin: 0;
 }
+
+body{
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 24px;
+    margin: 0;
+}
+
 body /deep/ h1 {
   font-size: 30px;
 }
