@@ -28,8 +28,10 @@
                 self.$.maList.addEventListener("page-changed", function () {
                     self.loadList();
                 });
-                self.$.maList.addEventListener("reset-list-selected", function () {
-                    self.resetListSelected();
+                self.$.maList.addEventListener("reset-list-selected", function (selected) {
+                    console.log(selected.selected);
+                    self.resetListSelected(selected.selected);
+                    console.log(selected);
                 });
                 this.loadList();
             },
@@ -46,9 +48,9 @@
                     }
                 }, null, 0);
             },
-            resetListSelected: function () {
+            resetListSelected: function (selected) {
                 for (var i in this.list) {
-                    this.list[i].selected = false;
+                    this.list[i].selected = selected;
                 }
             },
             resetList: function () {

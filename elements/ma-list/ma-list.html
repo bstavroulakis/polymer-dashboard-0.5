@@ -5,7 +5,7 @@
         <link href="ma-list.css" rel="stylesheet">
         <ma-grid class="actions divider-color">
             <ma-grid-item large="1" medium="1" small="1">
-                <paper-checkbox class="selectAll" type="checkbox"></paper-checkbox>
+                <paper-checkbox id="selectAll" type="checkbox" on-tap="{{toggleAllSelected}}"></paper-checkbox>
             </ma-grid-item>
             <ma-grid-item large="23" medium="23" small="23">
                 <paper-button id="actionButton" on-tap="{{actionToggle}}">Actions</paper-button>
@@ -33,18 +33,21 @@
                 total: 0,
                 pageSize: 5
             },
+            toggleAllSelected: function () {
+                this.fire('reset-list-selected', {selected: this.$.selectAll.checked});
+            },
             observe: {
                 'pagination.total': 'paginationChanged'
             },
-            actionToggle:function(){
+            actionToggle: function () {
                 this.$.actionDropdown.toggle();
             },
             pageArr: [],
-            changePage:function(event, detail, target){
+            changePage: function (event, detail, target) {
                 this.pagination.page = target.dataset.page;
                 this.fire("page-changed");
             },
-            paginationChanged: function() {
+            paginationChanged: function () {
                 var self = this;
                 var totalPages = Math.ceil(self.pagination.total / self.pagination.pageSize);
                 self.pageArr = [];
@@ -52,7 +55,7 @@
                     self.pageArr.push(i);
                 }
             },
-            ready:function(){
+            ready: function () {
                 this.paginationChanged();
             }
         });

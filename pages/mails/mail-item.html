@@ -64,8 +64,8 @@
                 if (this.item.selected) {
                     willHide = true;
                 }
-                this.fire('reset-list-selected');
-                if(!willHide)
+                this.fire('reset-list-selected', {selected: false});
+                if (!willHide)
                     this.item.selected = true;
                 animation.target = target.parentElement.querySelector(".item-details");
                 animation.fill = "forwards";
