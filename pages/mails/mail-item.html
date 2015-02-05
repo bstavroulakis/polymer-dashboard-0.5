@@ -10,7 +10,7 @@
             <div body class="{{{'item':true,'divider-color':true,'selected':item.selected} | tokenList}}">
                 <ma-grid class="item-header" data-itemid="{{item.Id}}" on-tap="{{showDetails}}">
                     <ma-grid-item large="2" medium="2" small="2">
-                        <paper-checkbox type="checkbox" on-tap="{{checkboxSelected}}"></paper-checkbox>
+                        <paper-checkbox type="checkbox" id="checked" on-tap="{{checkboxSelected}}"></paper-checkbox>
                     </ma-grid-item>
                     <ma-grid-item large="4" medium="4" small="4">
                         {{item.Sender}}
@@ -19,16 +19,13 @@
                         {{item.Title}}
                     </ma-grid-item>
                     <ma-grid-item large="6" medium="6" small="6">
-                        {{item.SentDate}}
+                        {{item.SentDate | maDateView}}
                     </ma-grid-item>
                 </ma-grid>
                 <div class="item-details">
                     <ma-grid>
-                        <ma-grid-item large="18" medium="18" small="24">
+                        <ma-grid-item large="24" medium="24" small="24">
                             <div class="title"><h2>{{item.Title}}</h2></div>
-                        </ma-grid-item>
-                        <ma-grid-item large="6" medium="6" small="24">
-                            <div class="sentDate">{{item.SentDate}}</div>
                         </ma-grid-item>
                         <ma-grid-item large="24" medium="24" small="24">
                             <div class="sender">{{item.Sender}}</div>
@@ -57,6 +54,16 @@
     <script>
         Polymer('mail-item', {
             item: {},
+            observe: {
+                'item.checked': 'checkedChanged'
+            },
+            checkedChanged: function (oldValue, newValue) {
+                if (newValue) {
+                    this.$.checked.checked = "checked";
+                } else {
+                    this.$.checked.checked = "";
+                }
+            },
             showDetails: function (event, details, target) {
                 var animation = this.$.pageAnimation;
                 var itemId = target.dataset.itemid;
@@ -73,6 +80,7 @@
                 this.player = animation.play();
             },
             checkboxSelected: function (event) {
+                this.item.checked = event.target.checked;
                 event.stopPropagation();
             }
         });

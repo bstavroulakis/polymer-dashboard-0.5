@@ -3,44 +3,53 @@
 <polymer-element name="ma-list">
     <template>
         <link href="ma-list.css" rel="stylesheet">
-        <ma-grid class="actions divider-color">
-            <ma-grid-item large="1" medium="1" small="1">
-                <paper-checkbox id="selectAll" type="checkbox" on-tap="{{toggleAllSelected}}"></paper-checkbox>
-            </ma-grid-item>
-            <ma-grid-item large="23" medium="23" small="23">
-                <paper-button id="actionButton" on-tap="{{actionToggle}}">Actions</paper-button>
-                <paper-dropdown id="actionDropdown" on-tap="{{actionToggle}}">
-                    <paper-item>Delete</paper-item>
-                </paper-dropdown>
-            </ma-grid-item>
-        </ma-grid>
-        <content></content>
-        <ul class="pagination">
-            <template repeat="{{p in pageArr}}">
-                <li class="{{{'default-primary-color':(p==pagination.page)} | tokenList}}">
-                    <paper-button on-tap="{{changePage}}" data-page="{{p}}">{{p}}</paper-button>
-                </li>
-            </template>
-        </ul>
+        <template if="{{pagination.total > 0}}">
+            <ma-grid class="actions">
+                <ma-grid-item large="24" medium="24" small="24">
+                    <paper-checkbox class="left" id="selectAll" type="checkbox" on-tap="{{toggleAllChecked}}"></paper-checkbox>
+                    <div class="left actions-btn">
+                        <paper-button raised class="default-primary-color" id="actionButton" on-tap="{{actionToggle}}">
+                            Actions
+                        </paper-button>
+                        <paper-dropdown id="actionDropdown" on-tap="{{actionToggle}}">
+                            <paper-item on-tap="{{deleteItems}}">Delete</paper-item>
+                        </paper-dropdown>
+                    </div>
+                </ma-grid-item>
+            </ma-grid>
+            <content></content>
+                <ul class="pagination">
+                    <template repeat="{{p in pageArr}}">
+                        <li class="{{{'default-primary-color':(p==pagination.page)} | tokenList}}">
+                            <paper-button on-tap="{{changePage}}" data-page="{{p}}">{{p}}</paper-button>
+                        </li>
+                    </template>
+                </ul>
+        </template>
+        <template if="{{paginxaation.total == 0}}">
+            No Items Found.
+        </template>
         <div class="clearfix"></div>
     </template>
     <script>
         Polymer('ma-list', {
-            list: [],
             itemElement: "",
             pagination: {
                 page: 1,
                 total: 0,
                 pageSize: 5
             },
-            toggleAllSelected: function () {
-                this.fire('reset-list-selected', {selected: this.$.selectAll.checked});
+            toggleAllChecked: function () {
+                this.fire('reset-list-checked', {selected: this.shadowRoot.querySelector("#selectAll").checked});
+            },
+            deleteItems: function () {
+                this.fire('action-trigger', {action: 'delete'});
             },
             observe: {
                 'pagination.total': 'paginationChanged'
             },
             actionToggle: function () {
-                this.$.actionDropdown.toggle();
+                this.shadowRoot.querySelector("#actionDropdown").toggle();
             },
             pageArr: [],
             changePage: function (event, detail, target) {

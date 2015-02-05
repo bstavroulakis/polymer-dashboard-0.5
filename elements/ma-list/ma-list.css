@@ -5,8 +5,9 @@ ma-grid, ::content ma-grid{
     padding-bottom:5px;
 }
 
-.selectAll{
+#selectAll{
     padding-top:15px;
+    padding-left:5px;
 }
 
 ::content ul,
@@ -22,11 +23,20 @@ li, ul, li {
 }
 
 .pagination{
-    margin-top:5px;
+    margin-top:15px;
     margin-bottom:5px;
+    margin-left:5px;
     display: inline-block;
 }
 
-.clearfix{
-    clear:both;
+.pagination paper-button{
+    width:20px;
+}
+
+.left{
+    float:left;
+}
+
+.actions-btn{
+    padding-left:15px;
 }

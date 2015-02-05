@@ -25,13 +25,18 @@
             ready: function () {
                 var self = this;
                 self.$.maList.pagination.page = 1;
+                self.$.maList.pagination.total = 0;
                 self.$.maList.addEventListener("page-changed", function () {
                     self.loadList();
                 });
-                self.$.maList.addEventListener("reset-list-selected", function (selected) {
-                    console.log(selected.selected);
-                    self.resetListSelected(selected.selected);
-                    console.log(selected);
+                self.$.maList.addEventListener("reset-list-selected", function (e) {
+                    self.resetListSelected(e.detail.selected);
+                });
+                self.$.maList.addEventListener("reset-list-checked", function (e) {
+                    self.resetListChecked(e.detail.selected);
+                });
+                self.$.maList.addEventListener("action-trigger", function (e) {
+                    self.actionTrigger(e.detail);
                 });
                 this.loadList();
             },
@@ -39,7 +44,6 @@
                 var self = this;
                 self.async(function () {
                     for (var i in self.list) {
-                        var element = self.$.maList;
                         for (var j in self.$.maList.childNodes) {
                             if (self.$.maList.childNodes[j].id == "maItem" + self.list[i].Id) {
                                 self.$.maList.childNodes[j].item = self.list[i];
@@ -48,14 +52,33 @@
                     }
                 }, null, 0);
             },
+            actionTrigger:function(action){
+                var self = this;
+                var items = [];
+                for(var i in self.list){
+                    if(self.list[i].checked) {
+                        items.push(self.list[i].Id);
+                    }
+                }
+                if(action.action == "delete"){
+                    this.$.repo.deleteMails(self.refreshList, items, self);
+                }
+            },
+            resetListChecked: function (selected) {
+                for (var i in this.list) {
+                    this.list[i].checked = selected;
+                }
+            },
             resetListSelected: function (selected) {
                 for (var i in this.list) {
                     this.list[i].selected = selected;
                 }
             },
-            resetList: function () {
-                this.$.maList.pagination.page = 1;
-                this.$.loadList();
+            refreshList: function (self) {
+                self.$.maList.pagination.page = 1;
+                self.async(function(){
+                    self.$.repo.getMails(self.mailListCallback, self.$.maList.pagination, self);
+                },null,200);
             },
             newItem: function () {
                 this.$.mailPopup.newItem();
@@ -69,7 +92,7 @@
                 for (var key in list) {
                     self.list.push({
                         Id: list[key].Id,
-                        IsSelected: false,
+                        checked: false,
                         Title: list[key].Title,
                         Message: list[key].Message,
                         SentDate: list[key].SentDate,

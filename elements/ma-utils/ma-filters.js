@@ -7,3 +7,9 @@ PolymerExpressions.prototype.linkPath = function(value) {
         return '#' + value;
     }
 };
+
+PolymerExpressions.prototype.maDateView = function(input) {
+    if(input == null)
+        return input;
+    return input.toLocaleString();
+};

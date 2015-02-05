@@ -55,6 +55,22 @@
                     callback(false, null, callbackSelf);
                 });
             },
+            deleteMails: function (callback, items, callbackSelf) {
+                var self = this;
+                self.$.repo.context.db.MailUsers.filter(function (mail) {
+                    mail.Mail__Id in this > 0
+                }, items).toArray(function (mailUsers) {
+                    for (var j = 0; j <= mailUsers.length - 1; j++) {
+                        self.$.repo.context.db.MailUsers.MailUser.remove(mailUsers[j].Id);
+                    }
+                    for (var i = 0; i <= items.length; i++) {
+                        self.$.repo.context.db.Mails.Mail.remove(items[i]);
+                    }
+                    self.$.repo.context.db.saveChanges(function () {
+                        callback(callbackSelf);
+                    });
+                });
+            },
             getMails: function (callback, pagination, callbackSelf) {
                 var self = this;
                 self.$.repo.context.db.MailUsers.include("Mail").include("User")
@@ -80,12 +96,15 @@
                 var self = this;
                 var mailIds = [];
                 for (var j in returnItems) {
-                    mailIds.push(returnItems[j].Id);
+                    if (returnItems[j] != null)
+                        mailIds.push(returnItems[j].Id);
                 }
                 self.$.repo.context.db.MailUsers.include("User").filter(function (mail) {
                     mail.Mail__Id in this > 0 && mail.IsSender == true
                 }, mailIds).toArray(function (senders) {
                             for (var j in returnItems) {
+                                if (returnItems[j] == null)
+                                    continue;
                                 for (var i = 0; i <= senders.length - 1; i++) {
                                     if (senders[i].Mail__Id == returnItems[j].Id) {
                                         var senderName = senders[i].User.Email;
