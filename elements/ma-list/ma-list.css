@@ -1,17 +1,19 @@
 ma-grid, ::content ma-grid{
-    margin-bottom: 5px;
+    margin-bottom: 0.7em;
     display: block;
-    padding-top:5px;
-    padding-bottom:5px;
+}
+
+::content .item-checkbox{
+    opacity:0.3;
+    padding-top: 0.3em;
 }
 
 #selectAll{
-    padding-top:15px;
-    padding-left:5px;
+    padding-top:1em;
+    padding-left:1em;
 }
 
-::content ul,
-li, ul, li {
+::content ul, ul, li {
     padding: 0;
     margin: 0;
     list-style-type: none;
@@ -23,14 +25,10 @@ li, ul, li {
 }
 
 .pagination{
-    margin-top:15px;
-    margin-bottom:5px;
-    margin-left:5px;
+    margin-top:1em;
+    margin-bottom:1em;
+    margin-left:0.5em;
     display: inline-block;
-}
-
-.pagination paper-button{
-    width:20px;
 }
 
 .left{
@@ -38,5 +36,18 @@ li, ul, li {
 }
 
 .actions-btn{
-    padding-left:15px;
+    padding-left:1em;
+}
+
+.pagination paper-button::shadow .button-content{
+    padding:0.3em 0.5em;
+    text-align: center;
+}
+
+.pagination paper-button{
+    min-width: 0;
+}
+
+::content .item::shadow [body]{
+    padding:0.5em 0.7em;
 }

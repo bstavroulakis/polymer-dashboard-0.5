@@ -1,48 +1,91 @@
-<link rel="import" href="../../elements/ma-box/ma-box.html" />
+<link rel="import" href="../../elements/ma-box/ma-box.html"/>
 <link rel="import" href="../../elements/ma-repos/task-repo.html">
 <link rel="import" href="../../elements/ma-list/ma-list.html">
-<link rel="import" href="../../pages/tasks/task-list-item.html">
 <link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="task-item.html">
+<link rel="import" href="task-popup.html">
 
 <polymer-element name="ma-page-tasks">
     <template>
         <link rel="stylesheet" href="tasks.css">
         <task-repo id="repo"></task-repo>
-        <ma-box class="content-color">
-            <div body>
-                <ma-list id="maList" list="{{list}}">
-                    <ul>
-                        <template repeat="{{item in list}}">
-                            <li>
-                                <paper-checkbox type="checkbox"></paper-checkbox>
-                                {{item.Details}}
-                            </li>
-                        </template>
-                    </ul>
-                </ma-list>
-            </div>
-        </ma-box>
-        <paper-fab icon="add" role="button" class="fabBtn" on-tap="{{saveUser}}"></paper-fab>
+        <ma-list id="maList" list="{{list}}">
+            <template repeat="{{item in list}}">
+                <task-item class="item" id="maItem{{item.Id}}"></task-item>
+            </template>
+        </ma-list>
+        <task-popup id="newPopup"></task-popup>
+        <paper-fab icon="add" role="button" class="fabBtn" on-tap="{{newItem}}"></paper-fab>
     </template>
     <script>
         Polymer('ma-page-tasks', {
-            list:[],
-            ready: function() {
+            list: [],
+            ready: function () {
                 var self = this;
                 self.$.maList.pagination.page = 1;
-                this.$.maList.addEventListener("page-changed",function(){
+                this.$.maList.addEventListener("page-changed", function () {
                     self.loadList();
+                });
+                self.$.maList.addEventListener("reset-list-checked", function (e) {
+                    self.resetListChecked(e.detail.selected);
+                });
+                self.$.maList.addEventListener("action-trigger", function (e) {
+                    self.actionTrigger(e.detail);
+                });
+                self.$.newPopup.addEventListener("task-created", function (e) {
+                    self.refreshList(self);
                 });
                 this.loadList();
             },
-            loadList:function(){
+            newItem: function () {
+                this.$.newPopup.newItem();
+            },
+            listChanged: function () {
+                var self = this;
+                self.async(function () {
+                    for (var i in self.list) {
+                        for (var j in self.$.maList.childNodes) {
+                            if (self.$.maList.childNodes[j].id == "maItem" + self.list[i].Id) {
+                                self.$.maList.childNodes[j].item = self.list[i];
+                            }
+                        }
+                    }
+                }, null, 0);
+            },
+            resetListChecked: function (selected) {
+                console.log(this.list);
+                for (var i in this.list) {
+                    this.list[i].checked = selected;
+                }
+            },
+            actionTrigger:function(action){
+                var self = this;
+                var items = [];
+                for(var i in self.list){
+                    if(self.list[i].checked) {
+                        items.push(self.list[i].Id);
+                    }
+                }
+                if(action.action == "delete"){
+                    this.$.repo.deleteTasks(self.refreshList, items, self);
+                }
+            },
+            refreshList: function (self) {
+                self.$.maList.pagination.page = 1;
+                self.async(function(){
+                    self.$.repo.getTasks(self.taskListCallback, self.$.maList.pagination, self);
+                },null,200);
+            },
+            loadList: function () {
                 this.$.repo.getTasks(this.taskListCallback, this.$.maList.pagination, this);
             },
-            taskListCallback: function(taskList, total, self) {
+            taskListCallback: function (taskList, total, self) {
                 self.$.maList.pagination.total = total;
                 self.list = [];
                 for (var key in taskList) {
                     self.list.push({
+                        Id:taskList[key].Id,
+                        checked: false,
                         Details: taskList[key].Details,
                         DeadLine: taskList[key].DeadLine,
                         CompleteDateTime: taskList[key].CompleteDateTime

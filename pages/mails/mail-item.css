@@ -15,13 +15,26 @@
 
 .selected{
     box-shadow: 0 0 2px rgba(0,0,0,.12),0 2px 4px rgba(0,0,0,.24);
-    margin-top:20px;
-    margin-bottom:20px;
+    margin-top:2em;
+    margin-bottom:2em;
 }
 
 .item-details {
     display:none;
 }
+
 .selected .item-details{
-    display: block;
+    display:block;
+}
+
+.item-date{
+    font-size:80%;
+    font-style: italic;
+    text-align: right;
+    float:right;
+    display: inline-block;
+}
+
+.item-sender{
+    display: inline-block;
 }

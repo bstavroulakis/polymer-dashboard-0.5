@@ -18,8 +18,7 @@
                 if (!validation.isValid) {
                     callback(false, validation.errors, callbackSelf);
                     return;
-                }
-                ;
+                };
                 this.$.repo.context.db.Users.User.query(function (user) {
                     user.Email == this.Receiver
                 }, mailModel).then(function (receiver) {

@@ -6,9 +6,10 @@
         <template if="{{pagination.total > 0}}">
             <ma-grid class="actions">
                 <ma-grid-item large="24" medium="24" small="24">
-                    <paper-checkbox class="left" id="selectAll" type="checkbox" on-tap="{{toggleAllChecked}}"></paper-checkbox>
+                    <paper-checkbox class="left" id="selectAll" type="checkbox"
+                                    on-tap="{{toggleAllChecked}}"></paper-checkbox>
                     <div class="left actions-btn">
-                        <paper-button raised class="default-primary-color" id="actionButton" on-tap="{{actionToggle}}">
+                        <paper-button class="default-primary-color" id="actionButton" on-tap="{{actionToggle}}">
                             Actions
                         </paper-button>
                         <paper-dropdown id="actionDropdown" on-tap="{{actionToggle}}">
@@ -18,6 +19,7 @@
                 </ma-grid-item>
             </ma-grid>
             <content></content>
+            <template if="{{pagination.total > pagination.pageSize}}">
                 <ul class="pagination">
                     <template repeat="{{p in pageArr}}">
                         <li class="{{{'default-primary-color':(p==pagination.page)} | tokenList}}">
@@ -25,6 +27,7 @@
                         </li>
                     </template>
                 </ul>
+            </template>
         </template>
         <template if="{{paginxaation.total == 0}}">
             No Items Found.
@@ -44,6 +47,7 @@
             },
             deleteItems: function () {
                 this.fire('action-trigger', {action: 'delete'});
+                this.shadowRoot.querySelector("#selectAll").checked = "";
             },
             observe: {
                 'pagination.total': 'paginationChanged'

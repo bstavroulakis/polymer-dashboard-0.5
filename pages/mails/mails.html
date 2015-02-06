@@ -1,18 +1,16 @@
 <link rel="import" href="../../elements/ma-box/ma-box.html"/>
 <link rel="import" href="../../elements/ma-repos/task-repo.html">
 <link rel="import" href="../../elements/ma-list/ma-list.html">
-<link rel="import" href="../../pages/tasks/task-list-item.html">
 <link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="../../elements/ma-repos/mail-repo.html">
 <link rel="import" href="mail-item.html">
 
 <polymer-element name="ma-page-mails">
     <template>
-        <link rel="stylesheet" href="mails.css">
         <mail-repo id="repo"></mail-repo>
         <ma-list id="maList" list="{{list}}">
             <template repeat="{{item in list}}">
-                <mail-item id="maItem{{item.Id}}"></mail-item>
+                <mail-item class="item" id="maItem{{item.Id}}"></mail-item>
             </template>
         </ma-list>
         <mail-popup id="mailPopup"></mail-popup>

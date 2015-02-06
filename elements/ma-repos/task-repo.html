@@ -1,5 +1,5 @@
-<link rel="import" href="../ma-data-repo/ma-data-repo.html" />
-<link rel="import" href="../ma-repos/auth-repo.html" />
+<link rel="import" href="../ma-data-repo/ma-data-repo.html"/>
+<link rel="import" href="../ma-repos/auth-repo.html"/>
 <polymer-element name="task-repo">
     <template>
         <ma-data-repo id="repo"></ma-data-repo>
@@ -8,24 +8,49 @@
     <script>
         Polymer('task-repo', {
             userSession: {},
-            ready: function() {
+            ready: function () {
                 this.$.repo.setupContext();
                 this.userSession = this.$.authRepo.session(true);
             },
-            getTasks: function(callback, pagination, callbackSelf) {
+            createTask: function (callback, model, callbackSelf) {
+                var self = this;
+                var validation = this.$.repo.context.validateJSON(this.$.repo.context.models.Task, model);
+                if (!validation.isValid) {
+                    callback(false, validation.errors, callbackSelf);
+                    return;
+                };
+                var item = new self.$.repo.context.db.Tasks.Task();
+                item.Details = model.Details;
+                item.Deadline = model.Deadline;
+                item.User__Id = self.userSession.Id;
+                self.$.repo.context.db.Tasks.addMany([item]);
+                self.$.repo.context.db.saveChanges(function () {
+                    callback(true, null, callbackSelf);
+                });
+            },
+            deleteTasks: function (callback, items, callbackSelf) {
+                var self = this;
+                for (var i = 0; i <= items.length; i++) {
+                    self.$.repo.context.db.Tasks.Task.remove(items[i]);
+                }
+                self.$.repo.context.db.saveChanges(function () {
+                    callback(callbackSelf);
+                });
+            },
+            getTasks: function (callback, pagination, callbackSelf) {
                 var self = this;
                 self.$.repo.context.db.Tasks.include("User")
-                    .orderBy(function(task) {
-                        return task.DeadLine
-                    })
-                    .filter(function(user) {
-                        user.User.Id == this.Id
-                    }, self.userSession).toArray(function(items) {
-                        pagination.total = items.length;
-                        var startElement = (pagination.page - 1) * pagination.pageSize;
-                        items = items.slice(startElement, startElement + pagination.pageSize);
-                        callback(self.$.repo.context.resultsToJSON(items), pagination.total, callbackSelf);
-                    });
+                        .orderBy(function (task) {
+                            return task.DeadLine
+                        })
+                        .filter(function (user) {
+                            user.User.Id == this.Id
+                        }, self.userSession).toArray(function (items) {
+                            pagination.total = items.length;
+                            var startElement = (pagination.page - 1) * pagination.pageSize;
+                            items = items.slice(startElement, startElement + pagination.pageSize);
+                            callback(self.$.repo.context.resultsToJSON(items), pagination.total, callbackSelf);
+                        });
             }
         });
     </script>

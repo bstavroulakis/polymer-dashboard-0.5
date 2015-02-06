@@ -1,0 +1,38 @@
+<polymer-element name="task-item" attributes="item">
+    <template>
+        <ma-box id="maBox{{item.Id}}" class="content-color" boxFit="true">
+            <div body>
+                <ma-grid>
+                    <ma-grid-item large="1" medium="1" small="1">
+                        <paper-checkbox class="item-checkbox" type="checkbox" id="checked"
+                                        on-tap="{{checkboxSelected}}"></paper-checkbox>
+                    </ma-grid-item>
+                    <ma-grid-item large="23" medium="23" small="23">
+                        {{item.Details}}
+                    </ma-grid-item>
+                </ma-grid>
+            </div>
+        </ma-box>
+    </template>
+    <script>
+        Polymer('task-item', {
+            item: {},
+            observe: {
+                'item.checked': 'checkedChanged'
+            },
+            checkedChanged: function (oldValue, newValue) {
+                if (newValue) {
+                    this.$.checked.checked = "checked";
+                } else {
+                    this.$.checked.checked = "";
+                }
+            },
+            ready: function () {
+            },
+            checkboxSelected: function (event) {
+                this.item.checked = event.target.checked;
+                event.stopPropagation();
+            }
+        });
+    </script>
+</polymer-element>

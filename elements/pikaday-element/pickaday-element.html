@@ -1,0 +1,27 @@
+<polymer-element name="pickaday-element" attributes="label">
+    <template>
+        <link rel="stylesheet" href="pickaday.css">
+        <paper-input floatingLabel label="{{label}}" type="text" id="datepicker" value="{{inputVal}}"></paper-input>
+        <div id="container"></div>
+    </template>
+    <script src="moment.js"></script>
+    <script src="pickaday.js"></script>
+    <script>
+        Polymer('pickaday-element', {
+            inputVal:"",
+            inputValChanged:function(oldValue, newValue){
+
+            },
+            ready:function () {
+                var picker = new Pikaday({
+                    field: this.$.datepicker,
+                    container: this.$.container,
+                    bound: false,
+                    showTime:true
+                });
+                picker.setMoment(moment().dayOfYear(366));
+            }
+        });
+    </script>
+</polymer-element>
+

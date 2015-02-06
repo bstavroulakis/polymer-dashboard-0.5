@@ -7,19 +7,27 @@
     <template>
         <link rel="stylesheet" href="mail-item.css">
         <ma-box id="maBox{{item.Id}}" class="content-color" boxFit="true">
-            <div body class="{{{'item':true,'divider-color':true,'selected':item.selected} | tokenList}}">
+            <div body class="{{{'divider-color':true,'selected':item.selected} | tokenList}}">
                 <ma-grid class="item-header" data-itemid="{{item.Id}}" on-tap="{{showDetails}}">
-                    <ma-grid-item large="2" medium="2" small="2">
-                        <paper-checkbox type="checkbox" id="checked" on-tap="{{checkboxSelected}}"></paper-checkbox>
+                    <ma-grid-item large="24" medium="24" small="24">
+                        <ma-grid>
+                            <ma-grid-item large="1" medium="1" small="1">
+                                <paper-checkbox class="item-checkbox" type="checkbox" id="checked"
+                                                on-tap="{{checkboxSelected}}"></paper-checkbox>
+                            </ma-grid-item>
+                            <ma-grid-item large="23" medium="23" small="23">
+                                <div class="item-sender">{{item.Sender}}</div>
+                                <div class="item-date">{{item.SentDate | maDateView}}</div>
+                            </ma-grid-item>
+                        </ma-grid>
                     </ma-grid-item>
-                    <ma-grid-item large="4" medium="4" small="4">
-                        {{item.Sender}}
-                    </ma-grid-item>
-                    <ma-grid-item large="12" medium="12" small="12">
-                        {{item.Title}}
-                    </ma-grid-item>
-                    <ma-grid-item large="6" medium="6" small="6">
-                        {{item.SentDate | maDateView}}
+                    <ma-grid-item large="24" medium="24" small="24">
+                        <ma-grid>
+                            <ma-grid-item large="1" medium="1" small="1"> </ma-grid-item>
+                            <ma-grid-item large="23" medium="23" small="23">
+                                {{item.Title}}
+                            </ma-grid-item>
+                        </ma-grid>
                     </ma-grid-item>
                 </ma-grid>
                 <div class="item-details">

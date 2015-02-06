@@ -1,22 +1,25 @@
 <link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="../../bower_components/paper-input/paper-autogrow-textarea.html">
 <link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
+<link rel="import" href="../../elements/pikaday-element/pickaday-element.html">
 
-<polymer-element name="mail-popup">
+<polymer-element name="task-popup">
     <template>
-        <mail-repo id="repo"></mail-repo>
-        <paper-dialog backdrop id="newItemPopup" heading="New Mail">
+        <task-repo id="repo"></task-repo>
+        <paper-dialog backdrop id="newItemPopup" heading="New Task">
             <style>
-                paper-input {
+                paper-input, pickaday-element::shadow paper-input {
                     width: 100%;
                     display: block;
                 }
+
                 paper-input /deep/ paper-input,
                 paper-input /deep/ .label,
                 paper-input /deep/ input {
                     margin: 0;
                     padding: 0;
                 }
+
                 paper-dialog /deep/ textarea {
                     padding: 5px !important;
                     border: 1px solid #898989 !important;
@@ -26,27 +29,33 @@
                     min-height: 100px;
                 }
             </style>
-            <paper-input type="text" label="Receiver" value="{{newItemModel.Receiver}}"></paper-input>
-            <paper-input type="text" label="Title" value="{{newItemModel.Title}}"></paper-input>
+            <paper-input type="text" label="Task" value="{{newItemModel.Details}}"></paper-input>
+            <pickaday-element label="Deadline" id="pickDeadline"></pickaday-element>
             <p>
-                <textarea placeholder="Message" value="{{newItemModel.Message}}"></textarea>
+                <paper-button class="default-primary-color" raised on-tap="{{createTask}}">Create</paper-button>
             </p>
-            <paper-button class="default-primary-color" raised on-tap="{{sendMail}}">Send</paper-button>
         </paper-dialog>
         <paper-toast id="toastError" text=""></paper-toast>
         <paper-toast id="toastSuccess" text=""></paper-toast>
     </template>
     <script>
-        Polymer('mail-popup', {
+        Polymer('task-popup', {
             newItemModel: {},
-            sendMail: function () {
-                this.$.repo.sendMail(this.sendMailCallback, this.newItemModel, this);
+            observe: {
+                '$.pickDeadline.inputVal': 'dateChangedCallback'
             },
-            sendMailCallback: function (success, errors, self) {
+            createTask: function () {
+                this.$.repo.createTask(this.createTaskCallback, this.newItemModel, this);
+            },
+            dateChangedCallback: function () {
+                this.newItemModel.Deadline = this.$.pickDeadline.inputVal;
+            },
+            createTaskCallback: function (success, errors, self) {
                 if (success) {
                     self.$.newItemPopup.close();
-                    self.$.toastSuccess.text = "Message Sent";
+                    self.$.toastSuccess.text = "Task Created";
                     self.$.toastSuccess.show();
+                    self.fire('task-created');
                 } else {
                     var errorVals = [];
                     errors.forEach(function (err) {
@@ -57,7 +66,7 @@
                 }
             },
             newItem: function () {
-                this.newItemModel = {Receiver: "", Title: "", Message: ""};
+                this.newItemModel = {Details: "", Deadline: ""};
                 this.$.newItemPopup.toggle();
             }
         });
