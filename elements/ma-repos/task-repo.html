@@ -12,16 +12,32 @@
                 this.$.repo.setupContext();
                 this.userSession = this.$.authRepo.session(true);
             },
+            setAsComplete: function (callback, id, callbackSelf) {
+                var self = this;
+                var queryModel = {UserId: self.userSession.Id, TaskId: id};
+                self.$.repo.context.db.Tasks.include("User")
+                        .filter(function (task) {
+                            task.User.Id == this.UserId && task.Id == this.TaskId
+                        }, queryModel).toArray(function (items) {
+                            var item = items[0];
+                            self.$.repo.context.db.Tasks.attach(item);
+                            item.CompletedDateTime = (new Date()).getTime();
+                            self.$.repo.context.db.saveChanges(function () {
+                                callback(true, null, callbackSelf, item);
+                            });
+                        });
+            },
             createTask: function (callback, model, callbackSelf) {
                 var self = this;
                 var validation = this.$.repo.context.validateJSON(this.$.repo.context.models.Task, model);
                 if (!validation.isValid) {
                     callback(false, validation.errors, callbackSelf);
                     return;
-                };
+                }
+                ;
                 var item = new self.$.repo.context.db.Tasks.Task();
                 item.Details = model.Details;
-                item.Deadline = model.Deadline;
+                item.DeadLine = model.Deadline;
                 item.User__Id = self.userSession.Id;
                 self.$.repo.context.db.Tasks.addMany([item]);
                 self.$.repo.context.db.saveChanges(function () {
@@ -40,7 +56,7 @@
             getTasks: function (callback, pagination, callbackSelf) {
                 var self = this;
                 self.$.repo.context.db.Tasks.include("User")
-                        .orderBy(function (task) {
+                        .orderByDescending(function (task) {
                             return task.DeadLine
                         })
                         .filter(function (user) {

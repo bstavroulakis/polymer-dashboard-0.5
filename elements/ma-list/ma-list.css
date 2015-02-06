@@ -51,3 +51,12 @@ ma-grid, ::content ma-grid{
 ::content .item::shadow [body]{
     padding:0.5em 0.7em;
 }
+
+
+::content .item::shadow .item-date{
+    font-size:80%;
+    font-style: italic;
+    text-align: right;
+    float:right;
+    display: inline-block;
+}

@@ -41,14 +41,11 @@
     <script>
         Polymer('task-popup', {
             newItemModel: {},
-            observe: {
-                '$.pickDeadline.inputVal': 'dateChangedCallback'
-            },
             createTask: function () {
+                this.newItemModel.Deadline = new Date(this.$.pickDeadline.inputVal);
+                console.log(this.$.pickDeadline.inputVal);
+                console.log(this.newItemModel.Deadline);
                 this.$.repo.createTask(this.createTaskCallback, this.newItemModel, this);
-            },
-            dateChangedCallback: function () {
-                this.newItemModel.Deadline = this.$.pickDeadline.inputVal;
             },
             createTaskCallback: function (success, errors, self) {
                 if (success) {

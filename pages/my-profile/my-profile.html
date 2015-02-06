@@ -21,34 +21,31 @@
             .avatar-details {
                 padding-left: 15px;
             }
-            ma-grid{
-                max-width:600px;
-                display:block;
-                margin:0 auto;
-                margin-top:15px;
+            .my-profile-width{
+                max-width:600px !important;
             }
         </style>
         <my-profile-repo id="repo"></my-profile-repo>
         <ma-utils id="utils"></ma-utils>
 
-        <ma-grid>
+        <ma-grid class="max-page-width my-profile-width">
             <ma-grid-item large="24" medium="24" small="24">
                 <ma-box class="content-color">
                     <div head>User Info</div>
                     <div body>
-                        <paper-input label="First Name" value="{{userModel.FirstName}}"></paper-input>
-                        <paper-input label="Last Name" value="{{userModel.LastName}}"></paper-input>
-                        <paper-input label="Email" value="{{userModel.Email}}"></paper-input>
-                        <paper-input label="Password" value="{{userModel.Password}}"></paper-input>
+                        <paper-input floatingLabel label="First Name" value="{{userModel.FirstName}}"></paper-input>
+                        <paper-input floatingLabel label="Last Name" value="{{userModel.LastName}}"></paper-input>
+                        <paper-input floatingLabel label="Email" value="{{userModel.Email}}"></paper-input>
+                        <paper-input floatingLabel label="Password" value="{{userModel.Password}}"></paper-input>
                     </div>
                 </ma-box>
                 <ma-box class="content-color">
                     <div head>Address Info</div>
                     <div body>
-                        <paper-input label="Address" value="{{userModel.UserAddress.Address}}"></paper-input>
-                        <paper-input label="State/Region" value="{{userModel.UserAddress.StateRegion}}"></paper-input>
-                        <paper-input label="Country" value="{{userModel.UserAddress.Country}}"></paper-input>
-                        <paper-input label="Zip Code" value="{{userModel.UserAddress.ZipCode}}"></paper-input>
+                        <paper-input floatingLabel label="Address" value="{{userModel.UserAddress.Address}}"></paper-input>
+                        <paper-input floatingLabel label="State/Region" value="{{userModel.UserAddress.StateRegion}}"></paper-input>
+                        <paper-input floatingLabel label="Country" value="{{userModel.UserAddress.Country}}"></paper-input>
+                        <paper-input floatingLabel label="Zip Code" value="{{userModel.UserAddress.ZipCode}}"></paper-input>
                     </div>
                 </ma-box>
             </ma-grid-item>

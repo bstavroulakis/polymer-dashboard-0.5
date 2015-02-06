@@ -39,3 +39,10 @@ body /deep/ .clearfix{
   bottom: 25px;
   right: 25px;
 }
+
+html /deep/ .max-page-width{
+    max-width:1400px;
+    display:block;
+    margin:0 auto;
+    margin-top:15px;
+}

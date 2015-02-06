@@ -1,5 +1,6 @@
 <polymer-element name="task-item" attributes="item">
     <template>
+        <task-repo id="repo"></task-repo>
         <ma-box id="maBox{{item.Id}}" class="content-color" boxFit="true">
             <div body>
                 <ma-grid>
@@ -8,7 +9,26 @@
                                         on-tap="{{checkboxSelected}}"></paper-checkbox>
                     </ma-grid-item>
                     <ma-grid-item large="23" medium="23" small="23">
-                        {{item.Details}}
+                        <ma-grid>
+                            <ma-grid-item large="9" medium="12" small="24">
+                                {{item.Details}}
+                            </ma-grid-item>
+                            <ma-grid-item large="11" medium="12" small="24">
+                                Until: ({{item.Deadline | maDateView}})
+                            </ma-grid-item>
+                            <ma-grid-item large="4" medium="24" small="24">
+                                <div class="item-date">
+                                    <template if="{{item.CompletedDateTime}}">
+                                        {{item.CompletedDateTime | maDateView}}
+                                    </template>
+                                    <template if="{{item.CompletedDateTime == null}}">
+                                        <paper-button data-itemid="{{item.Id}}" class="default-primary-color"
+                                                      on-tap="{{setAsComplete}}">Complete
+                                        </paper-button>
+                                    </template>
+                                </div>
+                            </ma-grid-item>
+                        </ma-grid>
                     </ma-grid-item>
                 </ma-grid>
             </div>
@@ -20,14 +40,27 @@
             observe: {
                 'item.checked': 'checkedChanged'
             },
+            setAsComplete: function (event, details, target) {
+                this.$.repo.setAsComplete(this.setAsCompleteCallback, target.dataset.itemid, this);
+            },
+            setAsCompleteCallback: function (success, errors, self, item) {
+                if (success) {
+                    self.item.CompletedDateTime = item.CompletedDateTime;
+                } else {
+                    var errorVals = [];
+                    errors.forEach(function (err) {
+                        errorVals.push(err.error);
+                    });
+                    self.$.toastError.text = errorVals.join(', ');
+                    self.$.toastError.show();
+                }
+            },
             checkedChanged: function (oldValue, newValue) {
                 if (newValue) {
                     this.$.checked.checked = "checked";
                 } else {
                     this.$.checked.checked = "";
                 }
-            },
-            ready: function () {
             },
             checkboxSelected: function (event) {
                 this.item.checked = event.target.checked;

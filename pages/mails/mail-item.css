@@ -1,6 +1,5 @@
 .item-header{
     cursor:pointer;
-    display:block;
 }
 
 .sender{
@@ -15,24 +14,16 @@
 
 .selected{
     box-shadow: 0 0 2px rgba(0,0,0,.12),0 2px 4px rgba(0,0,0,.24);
-    margin-top:2em;
-    margin-bottom:2em;
+    margin-top:1em;
+    margin-bottom:1em;
 }
 
 .item-details {
     display:none;
 }
 
-.selected .item-details{
+.item-header, .selected .item-details{
     display:block;
-}
-
-.item-date{
-    font-size:80%;
-    font-style: italic;
-    text-align: right;
-    float:right;
-    display: inline-block;
 }
 
 .item-sender{

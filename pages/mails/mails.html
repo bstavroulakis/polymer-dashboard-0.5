@@ -8,7 +8,7 @@
 <polymer-element name="ma-page-mails">
     <template>
         <mail-repo id="repo"></mail-repo>
-        <ma-list id="maList" list="{{list}}">
+        <ma-list  class="max-page-width" id="maList" list="{{list}}">
             <template repeat="{{item in list}}">
                 <mail-item class="item" id="maItem{{item.Id}}"></mail-item>
             </template>

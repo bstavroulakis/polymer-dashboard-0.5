@@ -7,13 +7,14 @@
 
 <polymer-element name="ma-page-tasks">
     <template>
-        <link rel="stylesheet" href="tasks.css">
         <task-repo id="repo"></task-repo>
-        <ma-list id="maList" list="{{list}}">
-            <template repeat="{{item in list}}">
-                <task-item class="item" id="maItem{{item.Id}}"></task-item>
-            </template>
-        </ma-list>
+        <div class="max-page-width">
+            <ma-list id="maList" list="{{list}}">
+                <template repeat="{{item in list}}">
+                    <task-item class="item" id="maItem{{item.Id}}"></task-item>
+                </template>
+            </ma-list>
+        </div>
         <task-popup id="newPopup"></task-popup>
         <paper-fab icon="add" role="button" class="fabBtn" on-tap="{{newItem}}"></paper-fab>
     </template>
@@ -58,23 +59,23 @@
                     this.list[i].checked = selected;
                 }
             },
-            actionTrigger:function(action){
+            actionTrigger: function (action) {
                 var self = this;
                 var items = [];
-                for(var i in self.list){
-                    if(self.list[i].checked) {
+                for (var i in self.list) {
+                    if (self.list[i].checked) {
                         items.push(self.list[i].Id);
                     }
                 }
-                if(action.action == "delete"){
+                if (action.action == "delete") {
                     this.$.repo.deleteTasks(self.refreshList, items, self);
                 }
             },
             refreshList: function (self) {
                 self.$.maList.pagination.page = 1;
-                self.async(function(){
+                self.async(function () {
                     self.$.repo.getTasks(self.taskListCallback, self.$.maList.pagination, self);
-                },null,200);
+                }, null, 200);
             },
             loadList: function () {
                 this.$.repo.getTasks(this.taskListCallback, this.$.maList.pagination, this);
@@ -84,11 +85,11 @@
                 self.list = [];
                 for (var key in taskList) {
                     self.list.push({
-                        Id:taskList[key].Id,
+                        Id: taskList[key].Id,
                         checked: false,
                         Details: taskList[key].Details,
-                        DeadLine: taskList[key].DeadLine,
-                        CompleteDateTime: taskList[key].CompleteDateTime
+                        Deadline: taskList[key].DeadLine,
+                        CompletedDateTime: taskList[key].CompletedDateTime
                     });
                 }
             }
