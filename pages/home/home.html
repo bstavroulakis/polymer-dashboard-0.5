@@ -1,20 +1,117 @@
+<link rel="import" href="../../elements/ma-box/ma-box.html">
+<link rel="import" href="../../elements/ma-repos/my-profile-repo.html">
+<link rel="import" href="../../elements/ma-repos/task-repo.html">
+<link rel="import" href="../../elements/ma-repos/mail-repo.html">
+<link rel="import" href="../../elements/ma-table/ma-table.html">
+
 <polymer-element name="ma-page-home">
     <template>
+        <style>
+            ma-box paper-input{
+                width:100%;
+            }
+            ma-grid ma-grid-item{
+                margin-bottom:1em;
+            }
+        </style>
+        <mail-repo id="mailRepo"></mail-repo>
+        <task-repo id="taskRepo"></task-repo>
+        <my-profile-repo id="myProfileRepo"></my-profile-repo>
         <ma-grid>
-            <ma-grid-item large="8" medium="12" small="24">
-                <ma-box>
+            <ma-grid-item large="12" medium="12" small="24">
+                <ma-box class="content-color">
+                    <div head class="indigo">Welcome {{model.profile.FirstName}}!</div>
                     <div body>
-                        <paper-input label="Name" value="{{loginModel.Email}}"></paper-input>
-                        <paper-input label="Email" value="{{loginModel.Email}}"></paper-input>
-                        <paper-input label="Password" value="{{loginModel.Email}}"></paper-input>
+                        <paper-input floatingLabel disabled label="Email"
+                                     value="{{model.profile.Email}}"></paper-input>
+                        <paper-input floatingLabel disabled label="First Name"
+                                     value="{{model.profile.FirstName}}"></paper-input>
+                        <paper-input floatingLabel disabled label="Last Name"
+                                     value="{{model.profile.LastName}}"></paper-input>
+                        <paper-input floatingLabel disabled label="Country"
+                                     value="{{model.profile.UserAddress.Country}}"></paper-input>
+                        <paper-input floatingLabel disabled label="Zip Code"
+                                     value="{{model.profile.UserAddress.ZipCode}}"></paper-input>
+                    </div>
+                </ma-box>
+            </ma-grid-item>
+            <ma-grid-item large="12" medium="12" small="24">
+                <ma-box class="content-color">
+                    <div head class="light-blue">Latest Tasks</div>
+                    <div body>
+                        <ma-table>
+                            <table>
+                                <thead>
+                                <tr>
+                                    <td>Details</td>
+                                    <td>Deadline</td>
+                                    <td>Completed</td>
+                                </tr>
+                                </thead>
+                                <template repeat="{{item in model.tasks}}">
+                                    <tr>
+                                        <td>{{item.Details}}</td>
+                                        <td>{{item.DeadLine|maDateView}}</td>
+                                        <td>{{item.CompletedDateTime|maDateView}}</td>
+                                    </tr>
+                                </template>
+                            </table>
+                        </ma-table>
+                    </div>
+                </ma-box>
+            </ma-grid-item>
+            <ma-grid-item large="12" medium="12" small="24">
+                <ma-box class="content-color">
+                    <div head class="light-green">Latest Mails</div>
+                    <div body>
+                        <ma-table>
+                            <table>
+                                <thead>
+                                <tr>
+                                    <td>Sender</td>
+                                    <td>Title</td>
+                                </tr>
+                                </thead>
+                                <template repeat="{{item in model.mails}}">
+                                    <tr>
+                                        <td>{{item.Sender}}</td>
+                                        <td>{{item.Title}}</td>
+                                    </tr>
+                                </template>
+                            </table>
+                        </ma-table>
                     </div>
                 </ma-box>
             </ma-grid-item>
         </ma-grid>
+        <p>&nbsp;</p>
     </template>
     <script>
         Polymer('ma-page-home', {
-            ready: function() {}
+            model: {
+                profile: {},
+                tasks: [],
+                mails: []
+            },
+            pagination: {
+                pageSize: 5,
+                page: 1,
+                total: 0
+            },
+            ready: function () {
+                this.$.myProfileRepo.getUser(this.getUserCallback, this);
+                this.$.taskRepo.getTasks(this.tasksCallback, this.pagination, this);
+                this.$.mailRepo.getMails(this.mailsCallback, this.pagination, this);
+            },
+            getUserCallback: function (user, self) {
+                self.model.profile = user;
+            },
+            tasksCallback: function (tasks, total, self) {
+                self.model.tasks = tasks;
+            },
+            mailsCallback: function (mails, total, self) {
+                self.model.mails = mails;
+            }
         });
     </script>
 </polymer-element>

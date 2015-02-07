@@ -1,36 +1,35 @@
-<link rel="import" href="../../bower_components/paper-shadow/paper-shadow.html" />
-<link rel="import" href="../../bower_components/core-toolbar/core-toolbar.html" />
-<link rel="import" href="../../bower_components/paper-input/paper-input.html" />
-<link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html" />
-<link rel="import" href="../../bower_components/font-roboto/roboto.html" />
-<link rel="import" href="../../bower_components/paper-button/paper-button.html" />
-<link rel="import" href="../../bower_components/core-media-query/core-media-query.html" />
-    
+<link rel="import" href="../../bower_components/paper-shadow/paper-shadow.html"/>
+<link rel="import" href="../../bower_components/core-toolbar/core-toolbar.html"/>
+<link rel="import" href="../../bower_components/paper-input/paper-input.html"/>
+<link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html"/>
+<link rel="import" href="../../bower_components/font-roboto/roboto.html"/>
+<link rel="import" href="../../bower_components/paper-button/paper-button.html"/>
+<link rel="import" href="../../bower_components/core-media-query/core-media-query.html"/>
+
 <polymer-element name="ma-page-dialog" attributes="headerImg">
     <template>
         <style>
-            .main-container{
-                width:450px;
-                margin:0 auto;
+            .main-container {
+                width: 450px;
+                margin: 0 auto;
+                display:block;
             }
         </style>
         <core-media-query query="max-width: 450px" queryMatches="{{queryMatches}}"></core-media-query>
-        <paper-shadow z="1" class="{{ queryMatches ? '' : 'main-container' }}">
-            <core-toolbar id="mainHeader" >
+        <ma-box class="{{ queryMatches ? '' : 'main-container' }}" boxFit>
+            <div head id="mainHeader">
                 <content select="[header]"></content>
-            </core-toolbar>
-            <content select="[body]"></content>
-        </paper-shadow>
+            </div>
+            <div body>
+                <content select="[body]"></content>
+            </div>
+        </ma-box>
     </template>
     <script>
         Polymer('ma-page-dialog', {
-            headerImg:"",
-            ready: function() {
-                if(this.querySelector('[header]') == null){
+            ready: function () {
+                if (this.querySelector('[header]') == null) {
                     this.$.mainHeader.style.display = "none";
-                }
-                if(this.headerImg != ""){
-                    this.$.mainHeader.style.backgroundImage = "url('" + this.headerImg + "')";
                 }
             }
         });

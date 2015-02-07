@@ -36,8 +36,8 @@ body /deep/ .clearfix{
 
 .fabBtn, html /deep/ .fabBtn {
   position: fixed;
-  bottom: 25px;
-  right: 25px;
+  bottom: 1em;
+  right: 1.5em;
 }
 
 html /deep/ .max-page-width{
@@ -45,4 +45,8 @@ html /deep/ .max-page-width{
     display:block;
     margin:0 auto;
     margin-top:15px;
+}
+
+html /deep/ .floated-label{
+    line-height:1em;
 }
