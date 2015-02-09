@@ -111,6 +111,8 @@
                     user.Id in this > 0
                 }, senderIds).toArray(function (users) {
                     for (var i in returnItems) {
+                        console.log(users);
+                        console.log(returnItems[i].SenderId);
                         returnItems[i]["Sender"] = users.filter(function (user) {
                             return user.Id == returnItems[i].SenderId
                         })[0].Email;

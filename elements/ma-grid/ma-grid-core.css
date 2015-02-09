@@ -6,7 +6,7 @@ https://github.com/yui/pure/blob/master/LICENSE.md
 */
 /*csslint regex-selectors:false, known-properties:false, duplicate-properties:false*/
 
-html /deep/ .ma-g {
+.ma-g ::content {
     letter-spacing: -0.31em; /* Webkit: collapse white-space between units */
     *letter-spacing: normal; /* reset IE < 8 */
     *word-spacing: -0.43em; /* IE < 8: collapse white-space between units */
@@ -50,11 +50,11 @@ html /deep/ .ma-g {
    and is not required in markup.
 */
 .opera-only :-o-prefocus,
-html /deep/ .ma-g {
+.ma-g ::content{
     word-spacing: -0.43em;
 }
 
-.ma-u {
+::content .ma-u {
     display: inline-block;
     *display: inline; /* IE < 8: fake inline-block */
     zoom: 1;
@@ -68,6 +68,6 @@ html /deep/ .ma-g {
 Resets the font family back to the OS/browser's default sans-serif font,
 this the same font stack that Normalize.css sets for the `body`.
 */
-html /deep/ .ma-g [class *= "ma-u"] {
+.ma-g ::content [class *= "ma-u"] {
     font-family: sans-serif;
 }

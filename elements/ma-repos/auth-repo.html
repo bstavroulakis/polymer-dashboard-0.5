@@ -8,8 +8,10 @@
             cookieName: "maAuth",
             authModel: {},
             ready: function() {
-                this.$.repo.setupContext();
-                this.authModel = this.$.repo.context.getJSON(this.$.repo.context.models.User);
+                this.async(function(){
+                    this.$.repo.setupContext();
+                    this.authModel = this.$.repo.context.getJSON(this.$.repo.context.models.User);
+                },null,0);
             },
             login: function(callback, authModel, args) {
                 var self = this;

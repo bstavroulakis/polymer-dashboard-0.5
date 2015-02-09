@@ -5,17 +5,16 @@
     </template>
     <script>
         Polymer('ma-config-repo', {
-            ready:function(){
-                this.$.repo.setupContext();
-            },
             getPages: function(callback, args) {
                 var self = this;
-                self.$.repo.context.db
-                .Pages
-                .Page
-                .readAll().then(function(items) {
-                    callback(self.$.repo.context.resultsToJSON(items), args);
-                });
+                self.async(function(){
+                    self.$.repo.context.db
+                            .Pages
+                            .Page
+                            .readAll().then(function(items) {
+                                callback(self.$.repo.context.resultsToJSON(items), args);
+                            });
+                },null,0);
             }
         });
     </script>

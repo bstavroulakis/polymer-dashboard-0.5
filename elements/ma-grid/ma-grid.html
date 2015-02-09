@@ -1,18 +1,22 @@
 <link rel="import" href="../../elements/ma-grid/ma-grid-item.html" />
-<link href="ma-grid-core.css" rel="stylesheet" />
-<link href="ma-grid-units.css" rel="stylesheet" />
-<link href="ma-grid-responsive.css" rel="stylesheet" />
+
+
 <polymer-element name="ma-grid">
     <template>
+        <link href="../../elements/ma-grid/ma-grid-responsive.css" rel="stylesheet" type="text/css">
         <style>
             :host,
             .ma-g {
                 width: 100%;
                 display: block;
             }
+            .ma-g ::content ma-grid-item{
+                float:left;
+            }
         </style>
         <div class="ma-g">
             <content></content>
+            <div class="clearfix"></div>
         </div>
     </template>
     <script>
