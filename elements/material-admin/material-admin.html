@@ -14,6 +14,7 @@
 <link rel="import" href="../material-admin/material-admin-header.html">
 <link rel="import" href="../material-admin/material-admin-drawer.html">
 <link rel="import" href="../material-admin/material-admin-main.html">
+<link rel="import" href="../ma-real-time/ma-real-time.html">
 
 <link rel="stylesheet" href="material-admin.css" shim-shadowdom>
 <link rel="stylesheet" href="material-admin-palette.css" shim-shadowdom>
@@ -25,6 +26,7 @@
         <ma-utils id="utils"></ma-utils>
         <ma-config-repo id="maConfigRepo"></ma-config-repo>
         <flatiron-director route="{{route}}" autoHash></flatiron-director>
+        <ma-real-time></ma-real-time>
         <ma-drawer horizontal layout rightDrawer="false" drawerWidth="200px">
             <material-admin-drawer route="{{route}}" pages="{{pages}}"></material-admin-drawer>
             <material-admin-header route="{{route}}" page="{{page}}" flex horizontal layout></material-admin-header>

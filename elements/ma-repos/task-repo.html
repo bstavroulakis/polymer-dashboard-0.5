@@ -15,9 +15,9 @@
             setAsComplete: function (callback, id, callbackSelf) {
                 var self = this;
                 var queryModel = {UserId: self.userSession.Id, TaskId: id};
-                self.$.repo.context.db.Tasks.include("User")
+                self.$.repo.context.db.Tasks
                         .filter(function (task) {
-                            task.User.Id == this.UserId && task.Id == this.TaskId
+                            task.Id == this.TaskId
                         }, queryModel).toArray(function (items) {
                             var item = items[0];
                             self.$.repo.context.db.Tasks.attach(item);
@@ -55,12 +55,12 @@
             },
             getTasks: function (callback, pagination, callbackSelf) {
                 var self = this;
-                self.$.repo.context.db.Tasks.include("User")
+                self.$.repo.context.db.Tasks
                         .orderByDescending(function (task) {
                             return task.DeadLine
                         })
                         .filter(function (user) {
-                            user.User.Id == this.Id
+                            user.User__Id == this.Id
                         }, self.userSession).toArray(function (items) {
                             pagination.total = items.length;
                             var startElement = (pagination.page - 1) * pagination.pageSize;

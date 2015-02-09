@@ -18,7 +18,8 @@
                 if (!validation.isValid) {
                     callback(false, validation.errors, callbackSelf);
                     return;
-                };
+                }
+                ;
                 this.$.repo.context.db.Users.User.query(function (user) {
                     user.Email == this.Receiver
                 }, mailModel).then(function (receiver) {
@@ -38,12 +39,12 @@
 
                         var senderUserMail = {};
                         senderUserMail.User__Id = self.userSession.Id;
-                        senderUserMail.IsSender = true;
+                        senderUserMail.Sender__Id = self.userSession.Id;
                         senderUserMail.Mail__Id = mail.Id;
                         var receiverUserMail = {};
                         receiverUserMail.User__Id = receiver[0].Id;
                         receiverUserMail.Mail__Id = mail.Id;
-                        receiverUserMail.IsSender = false;
+                        receiverUserMail.Sender__Id = self.userSession.Id;
 
                         self.$.repo.context.db.MailUsers.addMany([senderUserMail, receiverUserMail]);
                         self.$.repo.context.db.saveChanges(function () {
@@ -72,49 +73,50 @@
             },
             getMails: function (callback, pagination, callbackSelf) {
                 var self = this;
-                self.$.repo.context.db.MailUsers.include("Mail").include("User")
-                        .orderByDescending(function (mail) {
-                            return mail.Mail.SentDate
-                        })
+                self.$.repo.context.db.MailUsers
                         .filter(function (mail) {
-                            mail.User__Id == this.Id && mail.IsSender == false
+                            mail.User__Id == this.Id && mail.Sender__Id != mail.User__Id
                         }, self.userSession).toArray(function (items) {
-
-                            pagination.total = items.length;
-                            var startElement = (pagination.page - 1) * pagination.pageSize;
-                            items = items.slice(startElement, startElement + pagination.pageSize);
-
-                            var returnItems = [];
-                            for (var i in items) {
-                                returnItems.push(items[i].Mail);
-                            }
-                            self.getMailsCallback(returnItems, callback, pagination, callbackSelf)
+                            var mailIds = [];
+                            items.forEach(function (item) {
+                                mailIds.push(item.Mail__Id)
+                            });
+                            self.$.repo.context.db.Mails.filter(function (mail) {
+                                mail.Id in this > 0
+                            }, mailIds).toArray(function (mails) {
+                                mails.sort(function (a, b) {
+                                    return b.SentDate - a.SentDate
+                                });
+                                pagination.total = mails.length;
+                                var startElement = (pagination.page - 1) * pagination.pageSize;
+                                mails = mails.slice(startElement, startElement + pagination.pageSize);
+                                var returnItems = [];
+                                for (var i in mails) {
+                                    mails[i]["SenderId"] = items.filter(function (obj) {
+                                        return obj.Mail__Id == mails[i].Id
+                                    })[0].Sender__Id;
+                                    returnItems.push(mails[i]);
+                                }
+                                self.getMailsCallback(returnItems, callback, pagination, callbackSelf);
+                            });
                         });
             },
             getMailsCallback: function (returnItems, callback, pagination, callbackSelf) {
                 var self = this;
-                var mailIds = [];
-                for (var j in returnItems) {
-                    if (returnItems[j] != null)
-                        mailIds.push(returnItems[j].Id);
-                }
-                self.$.repo.context.db.MailUsers.include("User").filter(function (mail) {
-                    mail.Mail__Id in this > 0 && mail.IsSender == true
-                }, mailIds).toArray(function (senders) {
-                            for (var j in returnItems) {
-                                if (returnItems[j] == null)
-                                    continue;
-                                for (var i = 0; i <= senders.length - 1; i++) {
-                                    if (senders[i].Mail__Id == returnItems[j].Id) {
-                                        var senderName = senders[i].User.Email;
-                                        returnItems[j].Sender = senderName;
-                                        break;
-                                    }
-                                }
-                            }
-                            callback((returnItems), pagination.total, callbackSelf);
-                        }
-                );
+                var senderIds = [];
+                returnItems.forEach(function (item) {
+                    senderIds.push(item.SenderId)
+                });
+                self.$.repo.context.db.Users.filter(function (user) {
+                    user.Id in this > 0
+                }, senderIds).toArray(function (users) {
+                    for (var i in returnItems) {
+                        returnItems[i]["Sender"] = users.filter(function (user) {
+                            return user.Id == returnItems[i].SenderId
+                        })[0].Email;
+                    }
+                    callback((returnItems), pagination.total, callbackSelf);
+                })
             }
         });
     </script>

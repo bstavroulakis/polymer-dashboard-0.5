@@ -19,6 +19,9 @@
             CompletedDateTime:{
                 type: "datetime"
             },
+            User__Id:{
+                type:"int"
+            },
             User: {
                 type: "User",
                 inverseProperty: "Tasks"

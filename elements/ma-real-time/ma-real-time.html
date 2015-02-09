@@ -1,0 +1,24 @@
+<link rel="import" href="../../elements/ma-repos/notification-repo.html">
+<polymer-element name="ma-real-time">
+    <notification-repo id="repo"></notification-repo>
+    <script>
+        Polymer('ma-real-time', {
+            polling: 5000,
+            ranTimes: 0,
+            ranTimesChanged: function () {
+                this.async(function () {
+                    this.ranTimes += 1;
+                }, null, this.polling);
+            },
+            ready: function () {
+                this.ranTimes = 1;
+            },
+            getNotifications:function(){
+                this.repo.getNotifications(this.getNotificationsCallback,this);
+            },
+            getNotificationsCallback:function(notifications, self){
+
+            }
+        });
+    </script>
+</polymer-element>

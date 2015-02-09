@@ -1,0 +1,29 @@
+<link rel="import" href="../ma-data-repo/ma-data-repo.html"/>
+<link rel="import" href="../../elements/ma-repos/auth-repo.html">
+<polymer-element name="notification-repo">
+    <template>
+        <ma-data-repo id="repo"></ma-data-repo>
+        <auth-repo id="authRepo"></auth-repo>
+    </template>
+    <script>
+        Polymer('notification-repo', {
+            cookieName: "maAuth",
+            authModel: {},
+            userSession:{},
+            ready: function () {
+                this.$.repo.setupContext();
+                this.userSession = this.$.authRepo.session(true);
+            },
+            saveNotification: function () {
+
+            },
+            getNotifications: function (callback,selfCallback) {
+                this.$.repo.context.db.Notifications.filter(function(notification){
+                    notification.User__Id == this.Id && notification.ReadDate == null
+                },this.userSession).toArray(function(notifications){
+
+                })
+            }
+        });
+    </script>
+</polymer-element>

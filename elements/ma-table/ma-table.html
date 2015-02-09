@@ -1,8 +1,11 @@
 <polymer-element name="ma-table">
     <template>
         <style>
-            :host{
+            :host, ::content table{
                 width:100%;
+                border-collapse: collapse;
+            }
+            :host{
                 display:block;
                 padding-top:1em;
                 padding-bottom:1em;
@@ -15,11 +18,8 @@
                 border-left:0;
                 border-right:0;
             }
-            ::content tbody td:nth-child(even) {
-                background: #ff0000;
-            }
-            ::content table{
-                border-collapse: collapse;
+            ::content tr:nth-child(even) {
+                background: #dfdfdf;
             }
             ::content td{
                 border:1px solid #e5e5e5;

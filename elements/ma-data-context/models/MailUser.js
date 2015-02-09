@@ -20,9 +20,7 @@
             },
             Mail__Id: { type: 'int' },
             User__Id: { type: 'int' },
-            IsSender: {
-                type:"boolean"
-            }
+            Sender__Id: { type: 'int' }
         }
     }
 

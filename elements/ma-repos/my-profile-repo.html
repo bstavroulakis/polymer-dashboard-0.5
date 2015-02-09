@@ -16,10 +16,19 @@
                 var self = this;
                 self.userSession = self.$.authRepo.session(true);
                 if (self.userSession) {
-                    self.$.repo.context.db.Users.include("UserAddress").filter(function(user) {
-                        user.Id == this.Id
+                    self.$.repo.context.db.Users.filter(function(usr) {
+                        usr.Id == this.Id
                     }, self.userSession).toArray(function(user) {
-                        callback(user[0], args);
+                        user = user[0];
+                        console.log(user);
+                        if(user.UserAddress__Id != null) {
+                            self.$.repo.context.db.UserAddresses.filter(function (address) {
+                                address.Id == this.UserAddress__Id
+                            }, user).toArray(function (userAddress) {
+                                user.UserAddress = userAddress[0];
+                            });
+                        }
+                        callback(user, args);
                     });
                 }
             },

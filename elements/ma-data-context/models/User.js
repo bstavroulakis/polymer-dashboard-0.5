@@ -38,6 +38,9 @@
                 type: "UserAddress",
                 inverseProperty: "Users"
             },
+            UserAddress__Id:{
+                type:"int"
+            },
             Tasks: {
                 type: Array,
                 elementType: "Task",
@@ -46,6 +49,11 @@
             MailUsers:{
                 type:"Array",
                 elementType:"MailUser",
+                inverseProperty:"User"
+            },
+            Notifications:{
+                type:"Array",
+                elementType:"Notification",
                 inverseProperty:"User"
             }
         }

@@ -19,6 +19,8 @@
     <script src="models/Mail.js"></script>
     <script src="models/Page.js"></script>
     <script src="models/Config.js"></script>
+    <script src="models/Notification.js"></script>
+    <script src="models/NotificationType.js"></script>
     
     <script src="seed/User.js"></script>
     <script src="seed/UserAddress.js"></script>
@@ -27,6 +29,8 @@
     <script src="seed/Config.js"></script>
     <script src="seed/Task.js"></script>
     <script src="seed/MailUser.js"></script>
+    <script src="seed/Notification.js"></script>
+    <script src="seed/NotificationType.js"></script>
     
     <script>
         Polymer('ma-data-context', {
@@ -38,7 +42,9 @@
                 User: "User",
                 Page: "Page",
                 Config: "Config",
-                MailUser:"MailUser"
+                MailUser:"MailUser",
+                Notification:"Notification",
+                NotificationType:"NotificationType"
             },
             firstRun: false,
             entities: [],
@@ -56,7 +62,7 @@
                 
                 $data.EntityContext.extend("MaDb", opts);
                 self.db = new MaDb({
-                    provider: 'webSql',
+                    provider: 'indexedDb',
                     databaseName: "MaDb",
                     version:1
                 });

@@ -32,3 +32,8 @@ html /deep/ .deep-orange{background-color:#ff5722;color:#ffffff}
 html /deep/ .brow{background-color:#795548;color:#ffffff}
 html /deep/ .grey{background-color:#9e9e9e;color:#ffffff}
 html /deep/ .blue-grey{background-color:#607d8b;color:#ffffff}
+
+html/deep/ a{
+    text-decoration: none;
+    color:inherit;
+}

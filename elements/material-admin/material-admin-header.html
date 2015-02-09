@@ -1,73 +1,84 @@
 <link rel="import" href="../ma-repos/auth-repo.html">
+<link rel="import" href="../../bower_components/core-icons/core-icons.html">
+<link rel="import" href="../../bower_components/core-icon/core-icon.html">
+<link rel="import" href="../../bower_components/core-icons/notification-icons.html">
+
 <polymer-element name="material-admin-header" attributes="route,page">
     <template>
-        <link rel="import" href="../../bower_components/core-icons/core-icons.html">
-        <link rel="import" href="../../bower_components/core-icon/core-icon.html">
-        <link rel="import" href="../../bower_components/core-icons/notification-icons.html">
         <style>
             core-icon {
                 margin-right: 0.5em;
             }
-            core-icon.right{
-                margin-left:0.5em;
-                margin-right:0;
+
+            core-icon.right {
+                margin-left: 0.5em;
+                margin-right: 0;
+            }
+            .options{
+                text-align: right;
             }
         </style>
         <auth-repo id="authRepo"></auth-repo>
-        <div flex justified>
-            <h1>{{page.Label}}</h1>
-        </div>
-        <div justified></div>
-        <div justified>
-            <ma-dropdown-button icon="mail">
-                <paper-dropdown class="no-padding" halign="right">
-                    <div class="menu primary-text-color">
-                        <paper-item>Item 1</paper-item>
-                        <paper-item>Item 2</paper-item>
-                        <paper-item>Item 3</paper-item>
-                        <paper-item>
-                            More<core-icon class="right" icon="notification:more"></core-icon>
-                        </paper-item>
-                    </div>
-                </paper-dropdown>
-            </ma-dropdown-button>
-            <ma-dropdown-button icon="assignment">
-                <paper-dropdown class="no-padding" halign="right">
-                    <div class="menu primary-text-color">
-                        <paper-item>Task 1</paper-item>
-                        <paper-item>Task 2</paper-item>
-                        <paper-item>Task 3</paper-item>
-                        <paper-item>
-                            More<core-icon class="right" icon="notification:more"></core-icon>
-                        </paper-item>
-                    </div>
-                </paper-dropdown>
-            </ma-dropdown-button>
-            <ma-dropdown-button icon="more-vert">
-                <paper-dropdown class="no-padding" halign="right">
-                    <div class="menu primary-text-color">
-                        <paper-item>
-                            <a href="/#my-profile">
-                                <core-icon icon="social:person"></core-icon>My Profile
-                            </a>
-                        </paper-item>
-                        <paper-item on-tap="{{logout}}">
-                            <core-icon icon="exit-to-app"></core-icon>Logout
-                        </paper-item>
-                    </div>
-                </paper-dropdown>
-            </ma-dropdown-button>
-        </div>
+        <ma-utils id="utils"></ma-utils>
+        <ma-grid>
+            <ma-grid-item large="12" medium="12" small="12">
+                <h1>{{page.Label}}</h1>
+            </ma-grid-item>
+            <ma-grid-item class="options" large="12" medium="12" small="12">
+                <ma-dropdown-button icon="mail">
+                    <paper-dropdown class="no-padding" halign="right">
+                        <div class="menu primary-text-color">
+                            <paper-item>Item 1</paper-item>
+                            <paper-item>Item 2</paper-item>
+                            <paper-item>Item 3</paper-item>
+                            <paper-item>
+                                More
+                                <core-icon class="right" icon="notification:more"></core-icon>
+                            </paper-item>
+                        </div>
+                    </paper-dropdown>
+                </ma-dropdown-button>
+                <ma-dropdown-button icon="assignment">
+                    <paper-dropdown class="no-padding" halign="right">
+                        <div class="menu primary-text-color">
+                            <paper-item>Task 1</paper-item>
+                            <paper-item>Task 2</paper-item>
+                            <paper-item>Task 3</paper-item>
+                            <paper-item>
+                                More
+                                <core-icon class="right" icon="notification:more"></core-icon>
+                            </paper-item>
+                        </div>
+                    </paper-dropdown>
+                </ma-dropdown-button>
+                <ma-dropdown-button icon="more-vert">
+                    <paper-dropdown class="no-padding" halign="right">
+                        <div class="menu primary-text-color">
+                            <paper-item>
+                                <a href="{{'#my-profile' | toBaseUrl}}">
+                                    <core-icon icon="social:person"></core-icon>
+                                    My Profile
+                                </a>
+                            </paper-item>
+                            <paper-item on-tap="{{logout}}">
+                                <core-icon icon="exit-to-app"></core-icon>
+                                Logout
+                            </paper-item>
+                        </div>
+                    </paper-dropdown>
+                </ma-dropdown-button>
+            </ma-grid-item>
+        </ma-grid>
     </template>
     <script>
         Polymer('material-admin-header', {
             page: {},
-            ready: function() {
+            ready: function () {
                 if (!this.$.authRepo.session()) {
                     this.logout();
                 }
             },
-            logout: function() {
+            logout: function () {
                 this.$.authRepo.deleteSession();
                 window.location = "pages/auth/auth.html";
             }
