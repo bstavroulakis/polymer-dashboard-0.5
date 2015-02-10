@@ -34,13 +34,23 @@
                 maxLength: 100,
                 error: "Max length of last name is 100 characters"
             },
-            UserAddress: {
-                type: "UserAddress",
-                inverseProperty: "Users"
+            Address: {
+                type: String,
+                maxLength: 200
             },
-            UserAddress__Id:{
-                type:"int"
+            StateRegion: {
+                type: String,
+                maxLength: 50
             },
+            Country: {
+                type: String,
+                maxLength: 50
+            },
+            ZipCode: {
+                type: "int",
+                maxLength: 6
+            }
+            /*,
             Tasks: {
                 type: Array,
                 elementType: "Task",
@@ -55,7 +65,7 @@
                 type:"Array",
                 elementType:"Notification",
                 inverseProperty:"User"
-            }
+            }*/
         }
     };
 

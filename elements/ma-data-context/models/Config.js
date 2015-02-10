@@ -1,5 +1,4 @@
 
-
 (function(MaModel) {
 
     MaModel.Config = {

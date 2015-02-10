@@ -2,6 +2,12 @@
 <link rel="import" href="../../bower_components/core-animated-pages/core-animated-pages.html">
 <link rel="import" href="../../bower_components/flatiron-director/flatiron-director.html">
 <link rel="import" href="../../bower_components/core-ajax/core-ajax.html">
+
+<link rel="import" href="../../pages/home/home.html">
+<link rel="import" href="../../pages/tasks/tasks.html">
+<link rel="import" href="../../pages/my-profile/my-profile.html">
+<link rel="import" href="../../pages/mails/mails.html">
+
 <polymer-element name="material-admin-main" attributes="route,pages,page">
     <template>
         <style>
@@ -45,7 +51,7 @@
                     var pageElement = selectedPage.querySelector("ma-page-" + self.page.Link);
                     if(pageElement != null)
                         pageElement.parentElement.removeChild(pageElement);
-                        Polymer.import([self.$.utils.getBaseUrl() + this.page.Url.replace(/^\//, '')], function () {
+                        //Polymer.import([self.$.utils.getBaseUrl() + this.page.Url.replace(/^\//, '')], function () {
                             if (selectedPage != null) {
                                 selectedPage.innerHTML = "";
                                 var div = document.createElement("div");
@@ -53,7 +59,7 @@
                                 selectedPage.appendChild(div.childNodes[0]);
                                 self.$.pageWrapper.style.display = "";
                             }
-                        });
+                        //});
 
                 }, null, 0);
             }

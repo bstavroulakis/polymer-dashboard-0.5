@@ -8,6 +8,7 @@
                 key: true,
                 computed: true
             },
+            /*,
             Mail:{
                 type:"Mail",
                 required:true,
@@ -17,7 +18,7 @@
                 type:"User",
                 required:true,
                 inverseProperty:"MailUsers"
-            },
+            },*/
             Mail__Id: { type: 'int' },
             User__Id: { type: 'int' },
             Sender__Id: { type: 'int' }

@@ -9,8 +9,10 @@
         Polymer('mail-repo', {
             userSession: {},
             ready: function () {
-                this.$.repo.setupContext();
                 this.userSession = this.$.authRepo.session(true);
+                this.async(function () {
+                    this.$.repo.setupContext();
+                }, null, 0);
             },
             sendMail: function (callback, mailModel, callbackSelf) {
                 var self = this;

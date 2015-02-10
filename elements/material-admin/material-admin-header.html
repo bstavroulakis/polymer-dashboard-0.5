@@ -15,18 +15,17 @@
                 margin-left: 0.5em;
                 margin-right: 0;
             }
-
-            .options {
-                text-align: right;
+            #header{
+                width:100%;
             }
         </style>
         <auth-repo id="authRepo"></auth-repo>
         <ma-utils id="utils"></ma-utils>
-        <ma-grid>
-            <ma-grid-item large="12" medium="12" small="9">
+        <div id="header" layout horizontal>
+            <div flex>
                 <h1>{{page.Label}}</h1>
-            </ma-grid-item>
-            <ma-grid-item class="options" large="12" medium="12" small="15">
+            </div>
+            <div>
                 <ma-dropdown-button id="mailOption" icon="mail">
                     <paper-dropdown class="no-padding" halign="right">
                         <div class="menu primary-text-color">
@@ -65,8 +64,8 @@
                         </div>
                     </paper-dropdown>
                 </ma-dropdown-button>
-            </ma-grid-item>
-        </ma-grid>
+            </div>
+        </div>
         <ma-real-time-client id="realTimeClient"></ma-real-time-client>
     </template>
     <script>
@@ -74,6 +73,9 @@
             page: {},
             ready: function () {
                 var self = this;
+                if (!this.$.authRepo.session()) {
+                    this.logout();
+                }
                 this.$.realTimeClient.addEventListener('new-notifications', function (e) {
                     for(var i=0; i<= e.detail.length-1;i++){
                         if(e.detail[i].NotificationType__Id == 2){

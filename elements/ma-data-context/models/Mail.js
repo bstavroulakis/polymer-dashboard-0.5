@@ -20,11 +20,6 @@
             },
             SentDate:{
                 type: "datetime"
-            },
-            MailUsers:{
-                type:"Array",
-                elementType:"MailUser",
-                inverseProperty:"Mail"
             }
         }
     }

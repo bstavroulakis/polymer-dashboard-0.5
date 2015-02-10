@@ -2,16 +2,20 @@
     <template>
         <ma-utils id="utils"></ma-utils>
     </template>
+    <!--
     <script src="jaydata/jaydatamodules/q.js"></script>
     <script src="jaydata/jaydata.js"></script>
     <script src="jaydata/jaydataproviders/IndexedDbProvider.js"></script>
     <script src="jaydata/jaydataproviders/InMemoryProvider.js"></script>
-    <script src="jaydata/jaydatamodules/deferred.js"></script>
     <script src="jaydata/jaydatamodules/qDeferred.js"></script>
-    <script src="jaydata/jaydataproviders/SqLiteProvider.js"></script>
-<!--
-<script src="Models.js"></script>
 -->
+    <!--
+    <script src="jaydata/jaydatamodules/deferred.js"></script>
+    -->
+<script src="jaydata/jaydata.min.js"></script>
+<script src="Models.js"></script>
+
+    <!--
     <script src="models/Task.js"></script>
     <script src="models/User.js"></script>
     <script src="models/MailUser.js"></script>
@@ -31,14 +35,13 @@
     <script src="seed/MailUser.js"></script>
     <script src="seed/Notification.js"></script>
     <script src="seed/NotificationType.js"></script>
-    
+    -->
     <script>
         Polymer('ma-data-context', {
             db: {},
             models: {
                 Mail: "Mail",
                 Task:"Task",
-                UserAddress:"UserAddress",
                 User: "User",
                 Page: "Page",
                 Config: "Config",
@@ -84,7 +87,7 @@
                     self.db[plural].addMany(MaSeedData[name]);
                 };
                 self.db.saveChanges(function() {
-                    window.location = self.$.utils.getBaseUrl();
+                    window.location = window.document.URL;
                 });
             },
             getJSON: function(name) {

@@ -21,11 +21,12 @@
             },
             User__Id:{
                 type:"int"
-            },
+            }
+            /*,
             User: {
                 type: "User",
                 inverseProperty: "Tasks"
-            }
+            }*/
         }
     }
 

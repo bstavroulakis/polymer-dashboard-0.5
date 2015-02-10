@@ -17,7 +17,7 @@
         </style>
         <core-media-query query="max-width: 450px" queryMatches="{{queryMatches}}"></core-media-query>
         <ma-box class="{{ queryMatches ? '' : 'main-container' }}" boxFit>
-            <div head id="mainHeader">
+            <div head class="{{headClass}}" id="mainHeader">
                 <content select="[header]"></content>
             </div>
             <div body>
@@ -30,6 +30,9 @@
             ready: function () {
                 if (this.querySelector('[header]') == null) {
                     this.$.mainHeader.style.display = "none";
+                }
+                else {
+                    this.headClass = this.querySelector('[header]').className;
                 }
             }
         });

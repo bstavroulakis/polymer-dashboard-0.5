@@ -1,7 +1,7 @@
 <polymer-element name="ma-utils">
     <script>
         Polymer('ma-utils', {
-            clone: function(obj) {
+            clone: function (obj) {
                 if (null == obj || "object" != typeof obj) return obj;
                 var copy = obj.constructor();
                 for (var attr in obj) {
@@ -9,17 +9,20 @@
                 }
                 return copy;
             },
-            errorsToStr: function(errors) {
+            errorsToStr: function (errors) {
                 var errorVals = [];
-                errors.forEach(function(err) {
+                errors.forEach(function (err) {
                     errorVals.push(err.error);
                 });
                 return errorVals.join(', ');
             },
-            getBaseUrl:function(){
+            getBaseUrl: function () {
                 var re = /(.*\/)(.*\.html)/;
-                var baseURL = document.URL.split(re)[1].split('pages/')[0];
-                return baseURL;
+                var baseURL = document.URL;
+                var trimmed = baseURL.split(re)[1];
+                if (trimmed != null)
+                    trimmed = trimmed.split('pages/')[0];
+                return (trimmed != null) ? trimmed : baseURL;
             }
         });
     </script>

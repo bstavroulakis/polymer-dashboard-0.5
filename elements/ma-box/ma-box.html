@@ -49,13 +49,15 @@
             boxFit: false,
             noHead: false,
             ready: function () {
-                if (this.querySelector('[head]') == null) {
-                    this.$.boxHeader.style.display = "none";
-                    this.noHead = true;
-                }
-                else {
-                    this.headClass = this.querySelector('[head]').className;
-                }
+                this.async(function(){
+                    if (this.querySelector('[head]') == null) {
+                        this.$.boxHeader.style.display = "none";
+                        this.noHead = true;
+                    }
+                    else {
+                        this.headClass = this.querySelector('[head]').className;
+                    }
+                },0);
             }
         });
     </script>

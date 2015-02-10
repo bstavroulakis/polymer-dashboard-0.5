@@ -22,15 +22,17 @@
             },
             ReadDate: {
                 type: "datetime"
-            },
+            }
+            /*,
             User:{
                 type:"User",
                 inverseProperty:"Notifications"
-            },
+            }
+            ,
             NotificationType: {
                 type: "NotificationType",
                 inverseProperty: "Notifications"
-            }
+            }*/
         }
     }
 

@@ -1,8 +1,8 @@
 (function (MaSeedData) {
 
     MaSeedData.NotificationType = [
-        {Title: "Mail"},
-        {Title: "Task"}
+        {Id:1,Title: "Mail"},
+        {Id:2,Title: "Task"}
     ];
 
 })(window.MaSeedData = window.MaSeedData || {});

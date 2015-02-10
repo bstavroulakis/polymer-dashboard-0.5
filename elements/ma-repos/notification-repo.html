@@ -13,8 +13,10 @@
             notificationTypes: [],
             ready: function () {
                 this.$.repo.setupContext();
-                this.userSession = this.$.authRepo.session(true);
-                this.getNotificationTypes();
+                this.async(function () {
+                    this.userSession = this.$.authRepo.session(true);
+                    this.getNotificationTypes();
+                }, null, 1000);
             },
             getNotificationTypes: function () {
                 var self = this;

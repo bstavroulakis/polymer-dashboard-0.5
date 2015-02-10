@@ -12,12 +12,13 @@
                 type: String,
                 required: true,
                 maxLength: 70
-            },
+            }
+            /*,
             Notifications: {
                 type: Array,
                 elementType: "Notification",
                 inverseProperty: "NotificationType"
-            }
+            }*/
         }
     }
 

@@ -1,5 +1,5 @@
-<link rel="import" href="../ma-data-repo/ma-data-repo.html" />
-<link rel="import" href="../ma-repos/auth-repo.html" />
+<link rel="import" href="../ma-data-repo/ma-data-repo.html"/>
+<link rel="import" href="../ma-repos/auth-repo.html"/>
 <polymer-element name="my-profile-repo">
     <template>
         <ma-data-repo id="repo"></ma-data-repo>
@@ -9,46 +9,45 @@
         Polymer('my-profile-repo', {
             model: {},
             userSession: {},
-            ready:function(){
-                this.$.repo.setupContext();
+            ready: function () {
+                this.userSession = this.$.authRepo.session(true);
+                this.async(function () {
+                    this.$.repo.setupContext();
+                }, null, 0);
             },
-            getUser: function(callback, args) {
+            getUser: function (callback, args) {
                 var self = this;
-                self.userSession = self.$.authRepo.session(true);
                 if (self.userSession) {
-                    self.$.repo.context.db.Users.filter(function(usr) {
+                    self.$.repo.context.db.Users.filter(function (usr) {
                         usr.Id == this.Id
-                    }, self.userSession).toArray(function(user) {
+                    }, self.userSession).toArray(function (user) {
                         user = user[0];
-                        if(user.UserAddress__Id != null) {
-                            self.$.repo.context.db.UserAddresses.filter(function (address) {
-                                address.Id == this.UserAddress__Id
-                            }, user).toArray(function (userAddress) {
-                                user.UserAddress = userAddress[0];
-                            });
-                        }
                         callback(user, args);
                     });
                 }
             },
-            saveUser: function(updatedUser, callback, args) {
+            saveUser: function (updatedUser, callback, selfCallback) {
                 var self = this;
                 var validation = this.$.repo.context.validateJSON(this.$.repo.context.models.User, updatedUser.initData);
                 if (!validation.isValid) {
-                    callback(false, validation.errors, args);
+                    callback(false, validation.errors, selfCallback);
                     return;
                 }
-                self.$.repo.context.db.Users.User.query(function(user) {
+                console.log(updatedUser);
+                self.saveUserCallback(updatedUser, callback, selfCallback)
+            },
+            saveUserCallback: function (updatedUser, callback, selfCallback) {
+                var self = this;
+                self.$.repo.context.db.Users.User.query(function (user) {
                     user.Id == this.Id
-                }, self.userSession).then(function(user) {
+                }, self.userSession).then(function (user) {
                     self.$.repo.context.db.Users.attachOrGet(user[0]);
                     for (var key in updatedUser.initData) {
                         user[0][key] = updatedUser.initData[key];
                     };
-                    self.$.repo.context.db.Users.saveChanges(function() {
-                        callback(user[0], null, args);
+                    self.$.repo.context.db.Users.saveChanges(function () {
+                        callback(user[0], null, selfCallback);
                     });
-
                 });
             }
         });

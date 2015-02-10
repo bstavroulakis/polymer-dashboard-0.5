@@ -11,8 +11,10 @@
         Polymer('task-repo', {
             userSession: {},
             ready: function () {
-                this.$.repo.setupContext();
                 this.userSession = this.$.authRepo.session(true);
+                this.async(function () {
+                    this.$.repo.setupContext();
+                }, null, 0);
             },
             setAsComplete: function (callback, id, callbackSelf) {
                 var self = this;
