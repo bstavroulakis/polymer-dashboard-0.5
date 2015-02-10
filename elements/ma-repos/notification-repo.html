@@ -9,20 +9,50 @@
         Polymer('notification-repo', {
             cookieName: "maAuth",
             authModel: {},
-            userSession:{},
+            userSession: {},
+            notificationTypes: [],
             ready: function () {
                 this.$.repo.setupContext();
                 this.userSession = this.$.authRepo.session(true);
+                this.getNotificationTypes();
             },
-            saveNotification: function () {
+            getNotificationTypes: function () {
+                var self = this;
+                this.$.repo.context.db.NotificationTypes.toArray(function (types) {
+                    self.notificationTypes = types;
+                });
+            },
+            saveNotification: function (type, itemId, metadata) {
+                var self = this;
+                var typeId = 0;
+                for (var i in self.notificationTypes) {
+                    if (self.notificationTypes[i].Title == type) {
+                        typeId = self.notificationTypes[i].Id;
+                        break;
+                    }
+                }
+                var notification = {};
+                notification.NotificationType__Id = typeId;
+                notification.User__Id = self.userSession.Id;
+                notification.Item_Id = itemId;
+                notification.Metadata = metadata;
 
+                self.$.repo.context.db.Notifications.addMany([notification]);
+                self.$.repo.context.db.saveChanges();
             },
-            getNotifications: function (callback,selfCallback) {
-                this.$.repo.context.db.Notifications.filter(function(notification){
+            getNotifications: function (callback, selfCallback) {
+                var self = this;
+                self.$.repo.context.db.Notifications.filter(function (notification) {
                     notification.User__Id == this.Id && notification.ReadDate == null
-                },this.userSession).toArray(function(notifications){
-
-                })
+                }, this.userSession).toArray(function (notifications) {
+                    for (var i = 0; i <= notifications.length - 1; i++) {
+                        self.$.repo.context.db.Notifications.attach(notifications[i]);
+                        notifications[i].ReadDate = (new Date()).getTime();
+                    }
+                    self.$.repo.context.db.saveChanges(function () {
+                        callback(notifications, selfCallback);
+                    });
+                });
             }
         });
     </script>

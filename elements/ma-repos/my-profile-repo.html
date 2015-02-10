@@ -20,7 +20,6 @@
                         usr.Id == this.Id
                     }, self.userSession).toArray(function(user) {
                         user = user[0];
-                        console.log(user);
                         if(user.UserAddress__Id != null) {
                             self.$.repo.context.db.UserAddresses.filter(function (address) {
                                 address.Id == this.UserAddress__Id

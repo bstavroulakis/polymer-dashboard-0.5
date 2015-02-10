@@ -1,0 +1,32 @@
+<link rel="import" href="../../elements/ma-real-time/ma-real-time.html">
+<polymer-element name="ma-real-time-client">
+    <template>
+    </template>
+    <script>
+        Polymer('ma-real-time-client', {
+            polling: 3000,
+            realTimeParent:{},
+            ready:function(){
+                this.setupParent();
+            },
+            setupParent:function(){
+                var self = this;
+                if(!window.document.querySelector("ma-real-time")){
+                    var div = document.createElement("div");
+                    div.innerHTML = "<ma-real-time></ma-real-time>";
+                    window.document.body.appendChild(div.childNodes[0]);
+                    self.realTimeParent = window.document.querySelector("ma-real-time");
+                }else{
+                    self.realTimeParent = window.document.querySelector("ma-real-time");
+                }
+                self.setupHandler();
+            },
+            setupHandler: function () {
+                var self = this;
+                self.realTimeParent.addEventListener('new-notifications', function (e) {
+                    self.fire("new-notifications", e.detail);
+                });
+            }
+        });
+    </script>
+</polymer-element>

@@ -1,9 +1,11 @@
 <link rel="import" href="../ma-data-repo/ma-data-repo.html"/>
 <link rel="import" href="../ma-repos/auth-repo.html"/>
+<link rel="import" href="../ma-repos/notification-repo.html"/>
 <polymer-element name="task-repo">
     <template>
         <ma-data-repo id="repo"></ma-data-repo>
         <auth-repo id="authRepo"></auth-repo>
+        <notification-repo id="notificationRepo"></notification-repo>
     </template>
     <script>
         Polymer('task-repo', {
@@ -41,6 +43,7 @@
                 item.User__Id = self.userSession.Id;
                 self.$.repo.context.db.Tasks.addMany([item]);
                 self.$.repo.context.db.saveChanges(function () {
+                    self.$.notificationRepo.saveNotification("Task", item.Id, item.DeadLine);
                     callback(true, null, callbackSelf);
                 });
             },

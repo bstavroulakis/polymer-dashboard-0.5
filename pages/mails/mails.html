@@ -3,6 +3,7 @@
 <link rel="import" href="../../elements/ma-list/ma-list.html">
 <link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="../../elements/ma-repos/mail-repo.html">
+<link rel="import" href="../../elements/ma-real-time/ma-real-time-client.html">
 <link rel="import" href="mail-item.html">
 
 <polymer-element name="ma-page-mails">
@@ -15,6 +16,7 @@
         </ma-list>
         <mail-popup id="mailPopup"></mail-popup>
         <paper-fab icon="add" role="button" class="fabBtn" on-tap="{{newItem}}"></paper-fab>
+        <ma-real-time-client id="realTimeClient"></ma-real-time-client>
     </template>
     <script>
         Polymer('ma-page-mails', {
@@ -35,6 +37,16 @@
                 });
                 self.$.maList.addEventListener("action-trigger", function (e) {
                     self.actionTrigger(e.detail);
+                });
+                self.$.realTimeClient.addEventListener('new-notifications', function (e) {
+                    var updateList = false;
+                    for (var i = 0; i <= e.detail.length - 1; i++) {
+                        if (e.detail[i].NotificationType__Id == 1) {
+                            updateList = true;
+                            break;
+                        }
+                    }
+                    if (updateList) { self.refreshList(self); }
                 });
                 this.loadList();
             },

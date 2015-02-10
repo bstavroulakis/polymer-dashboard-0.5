@@ -1,24 +1,48 @@
-  <polymer-element name="ma-dropdown-button" extends="paper-icon-button" relative on-tap="{{toggle}}" noink>
-  <template>
-      <style>
-          :host{
-              z-index:auto;
-          }
-          :content{
-            color:#000000;
-          }
-      </style>
-    <shadow></shadow>
-    <content></content>
-  </template>
-  <script>
-    Polymer({
-      toggle: function() {
-        if (!this.dropdown) {
-          this.dropdown = this.querySelector('paper-dropdown');
-        }
-        this.dropdown && this.dropdown.toggle();
-      }
-    });
-  </script>
-  </polymer-element>  
+<polymer-element name="ma-dropdown-button" extends="paper-icon-button" relative on-tap="{{toggle}}" noink>
+    <template>
+        <style>
+            :host {
+                z-index: auto;
+            }
+
+            :content {
+                color: #000000;
+            }
+
+            .notification {
+                position: absolute;
+                top: 0px;
+                right: 0px;
+                background-color: #f1592a;
+                font-size: 60%;
+                padding-left: 0.5em;
+                padding-right: 0.5em;
+                padding-top: 0.3em;
+                padding-bottom: 0.3em;
+                -webkit-border-radius: 0.5em;
+                border-radius: 0.7em;
+                -moz-border-radius: 0.5em;
+                z-index: 1;
+                line-height: 1em;
+                font-weight:500;
+            }
+        </style>
+        <template if="{{notificationNum > 0}}">
+            <div class="notification">{{notificationNum}}</div>
+        </template>
+        <shadow></shadow>
+        <content></content>
+    </template>
+    <script>
+        Polymer({
+            notificationNum: 0,
+            toggle: function () {
+                this.notificationNum = 0;
+                if (!this.dropdown) {
+                    this.dropdown = this.querySelector('paper-dropdown');
+                }
+                this.dropdown && this.dropdown.toggle();
+            }
+        });
+    </script>
+</polymer-element>

@@ -7,11 +7,12 @@
 <polymer-element name="ma-page-home">
     <template>
         <style>
-            ma-box paper-input{
-                width:100%;
+            ma-box paper-input {
+                width: 100%;
             }
-            ma-grid ma-grid-item{
-                margin-bottom:1em;
+
+            ma-grid ma-grid-item {
+                margin-bottom: 1em;
             }
         </style>
         <mail-repo id="mailRepo"></mail-repo>
@@ -85,6 +86,7 @@
             </ma-grid-item>
         </ma-grid>
         <p>&nbsp;</p>
+        <ma-real-time-client id="realTimeClient"></ma-real-time-client>
     </template>
     <script>
         Polymer('ma-page-home', {
@@ -99,18 +101,50 @@
                 total: 0
             },
             ready: function () {
-                this.$.myProfileRepo.getUser(this.getUserCallback, this);
-                this.$.taskRepo.getTasks(this.tasksCallback, this.pagination, this);
-                this.$.mailRepo.getMails(this.mailsCallback, this.pagination, this);
+                var self = this;
+                self.$.myProfileRepo.getUser(self.getUserCallback, self);
+                self.getTasks();
+                self.getMails();
+                self.$.realTimeClient.addEventListener('new-notifications', function (e) {
+                    var updateTasks = false, updateMails = false;
+                    for (var i = 0; i <= e.detail.length - 1; i++) {
+                        if (e.detail[i].NotificationType__Id == 2) {
+                            updateTasks = true;
+                        } else if (e.detail[i].NotificationType__Id == 1) {
+                            updateMails = true;
+                        }
+                    }
+                    if (updateTasks) { self.getTasks(); }
+                    if (updateMails) { self.getMails(); }
+                });
             },
             getUserCallback: function (user, self) {
                 self.model.profile = user;
             },
+            getTasks: function () {
+                this.$.taskRepo.getTasks(this.tasksCallback, this.pagination, this);
+            },
+            getMails: function () {
+                this.$.mailRepo.getMails(this.mailsCallback, this.pagination, this);
+            },
             tasksCallback: function (tasks, total, self) {
-                self.model.tasks = tasks;
+                self.model.tasks = [];
+                for (var i = 0; i <= tasks.length - 1; i++) {
+                    self.model.tasks.push({
+                        Details: tasks[i].Details,
+                        DeadLine: tasks[i].DeadLine,
+                        CompletedDateTime: tasks[i].CompletedDateTime
+                    });
+                }
             },
             mailsCallback: function (mails, total, self) {
-                self.model.mails = mails;
+                self.model.mails = [];
+                for (var i = 0; i <= mails.length - 1; i++) {
+                    self.model.mails.push({
+                        Sender: mails[i].Sender,
+                        Title: mails[i].Title
+                    });
+                }
             }
         });
     </script>

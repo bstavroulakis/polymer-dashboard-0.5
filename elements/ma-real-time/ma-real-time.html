@@ -1,23 +1,28 @@
 <link rel="import" href="../../elements/ma-repos/notification-repo.html">
 <polymer-element name="ma-real-time">
-    <notification-repo id="repo"></notification-repo>
+    <template>
+        <notification-repo id="repo"></notification-repo>
+    </template>
     <script>
         Polymer('ma-real-time', {
-            polling: 5000,
-            ranTimes: 0,
-            ranTimesChanged: function () {
-                this.async(function () {
-                    this.ranTimes += 1;
-                }, null, this.polling);
+            polling: 3000,
+            getNotifications: function () {
+                var self = this;
+                self.async(function () {
+                    self.getNotificationsCall();
+                }, null, self.polling);
             },
             ready: function () {
-                this.ranTimes = 1;
+                this.getNotifications();
             },
-            getNotifications:function(){
-                this.repo.getNotifications(this.getNotificationsCallback,this);
+            getNotificationsCall: function () {
+                this.$.repo.getNotifications(this.getNotificationsCallback, this);
             },
-            getNotificationsCallback:function(notifications, self){
-
+            getNotificationsCallback: function (notifications, self) {
+                if(notifications.length > 0){
+                    self.fire("new-notifications", notifications);
+                }
+                self.getNotifications();
             }
         });
     </script>

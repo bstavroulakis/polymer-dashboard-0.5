@@ -17,6 +17,9 @@
             Item_Id: {
                 type: "int"
             },
+            Metadata:{
+                type:"string"
+            },
             ReadDate: {
                 type: "datetime"
             },
