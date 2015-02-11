@@ -5,27 +5,7 @@
 <polymer-element name="mail-popup">
     <template>
         <mail-repo id="repo"></mail-repo>
-        <paper-dialog backdrop id="newItemPopup" heading="New Mail">
-            <style>
-                paper-input {
-                    width: 100%;
-                    display: block;
-                }
-                paper-input /deep/ paper-input,
-                paper-input /deep/ .label,
-                paper-input /deep/ input {
-                    margin: 0;
-                    padding: 0;
-                }
-                textarea {
-                    padding: 5px !important;
-                    border: 1px solid #898989 !important;
-                    width: 100% !important;
-                    display: block !important;
-                    min-width: 200px;
-                    min-height: 100px;
-                }
-            </style>
+        <paper-dialog backdrop id="newItemPopup" heading="New Mail" class="newItemPanel">
             <paper-input type="text" label="Receiver" value="{{newItemModel.Receiver}}"></paper-input>
             <paper-input type="text" label="Title" value="{{newItemModel.Title}}"></paper-input>
             <p>

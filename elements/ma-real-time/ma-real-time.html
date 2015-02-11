@@ -5,7 +5,8 @@
     </template>
     <script>
         Polymer('ma-real-time', {
-            polling: 3000,
+            polling: 1000,
+            handled:[],
             getNotifications: function () {
                 var self = this;
                 self.async(function () {
@@ -16,11 +17,19 @@
                 this.getNotifications();
             },
             getNotificationsCall: function () {
-                this.$.repo.getNotifications(this.getNotificationsCallback, this);
+                this.$.repo.getNotifications(this.getNotificationsCallback, this.polling, this);
             },
             getNotificationsCallback: function (notifications, self) {
                 if(notifications.length > 0){
-                    self.fire("new-notifications", notifications);
+                    var newNotifications = [];
+                    for(var i in notifications){
+                        if(self.handled.indexOf(notifications[i].Id) == -1)
+                        {
+                            self.handled.push(notifications[i].Id);
+                            newNotifications.push(notifications[i]);
+                        }
+                    }
+                    self.fire("new-notifications", newNotifications);
                 }
                 self.getNotifications();
             }

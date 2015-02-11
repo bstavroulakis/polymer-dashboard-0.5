@@ -19,7 +19,7 @@
         <task-repo id="taskRepo"></task-repo>
         <my-profile-repo id="myProfileRepo"></my-profile-repo>
         <ma-grid>
-            <ma-grid-item large="12" medium="12" small="24">
+            <ma-grid-item large="8" medium="8" small="24">
                 <ma-box class="content-color">
                     <div head class="teal">Welcome {{model.profile.FirstName}}!</div>
                     <div body>
@@ -32,7 +32,7 @@
                     </div>
                 </ma-box>
             </ma-grid-item>
-            <ma-grid-item large="12" medium="12" small="24">
+            <ma-grid-item large="16" medium="16" small="24">
                 <ma-box class="content-color">
                     <div head class="light-blue">Latest Tasks</div>
                     <div body>
@@ -45,19 +45,19 @@
                                     <td>Completed</td>
                                 </tr>
                                 </thead>
-                                <template repeat="{{item in model.tasks}}">
-                                    <tr>
-                                        <td>{{item.Details}}</td>
-                                        <td>{{item.DeadLine|maDateView}}</td>
-                                        <td>{{item.CompletedDateTime|maDateView}}</td>
-                                    </tr>
-                                </template>
+                                <tbody>
+                                <tr template repeat="{{item in model.tasks}}">
+                                    <td>{{item.Details}}</td>
+                                    <td>{{item.DeadLine|maDateView}}</td>
+                                    <td>{{item.CompletedDateTime|maDateView}}</td>
+                                </tr>
+                                </tbody>
                             </table>
                         </ma-table>
                     </div>
                 </ma-box>
             </ma-grid-item>
-            <ma-grid-item large="12" medium="12" small="24">
+            <ma-grid-item large="24" medium="24" small="24">
                 <ma-box class="content-color">
                     <div head class="light-green">Latest Mails</div>
                     <div body>
@@ -69,12 +69,12 @@
                                     <td>Title</td>
                                 </tr>
                                 </thead>
-                                <template repeat="{{item in model.mails}}">
-                                    <tr>
-                                        <td>{{item.Sender}}</td>
-                                        <td>{{item.Title}}</td>
-                                    </tr>
-                                </template>
+                                <tbody>
+                                <tr template repeat="{{item in model.mails}}">
+                                    <td>{{item.Sender}}</td>
+                                    <td>{{item.Title}}</td>
+                                </tr>
+                                </tbody>
                             </table>
                         </ma-table>
                     </div>
@@ -110,8 +110,12 @@
                             updateMails = true;
                         }
                     }
-                    if (updateTasks) { self.getTasks(); }
-                    if (updateMails) { self.getMails(); }
+                    if (updateTasks) {
+                        self.getTasks();
+                    }
+                    if (updateMails) {
+                        self.getMails();
+                    }
                 });
             },
             getUserCallback: function (user, self) {

@@ -35,9 +35,6 @@
                 self.$.maList.addEventListener("action-trigger", function (e) {
                     self.actionTrigger(e.detail);
                 });
-                self.$.newPopup.addEventListener("task-created", function (e) {
-                    self.refreshList(self);
-                });
                 self.$.realTimeClient.addEventListener('new-notifications', function (e) {
                     var updateList = false;
                     for (var i = 0; i <= e.detail.length - 1; i++) {

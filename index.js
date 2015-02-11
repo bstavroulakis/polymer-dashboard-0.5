@@ -5053,17 +5053,17 @@ Polymer('core-menu');;
             db: {},
             models: {
                 Mail: "Mail",
-                Task:"Task",
+                Task: "Task",
                 User: "User",
                 Page: "Page",
                 Config: "Config",
-                MailUser:"MailUser",
-                Notification:"Notification",
-                NotificationType:"NotificationType"
+                MailUser: "MailUser",
+                Notification: "Notification",
+                NotificationType: "NotificationType"
             },
             firstRun: false,
             entities: [],
-            ready: function() {
+            ready: function () {
                 var self = this;
                 var opts = {};
                 for (var key in this.models) {
@@ -5073,44 +5073,47 @@ Polymer('core-menu');;
                         type: $data.EntitySet,
                         elementType: name
                     };
-                };
-                
+                }
+                ;
+
                 $data.EntityContext.extend("MaDb", opts);
+                var provider = ((!window.indexedDB) ? 'webSql' : 'indexedDb');
                 self.db = new MaDb({
-                    provider: 'indexedDb',
+                    provider: provider,
                     databaseName: "MaDb",
-                    version:1
+                    version: 1
                 });
-                self.db.onReady(function() {
+                self.db.onReady(function () {
                     self.db.Configs.Config.readAll()
-                        .then(function(configs) {
-                            if (configs.length == 0) {
-                                self.seedData();
-                            }
-                        });
+                            .then(function (configs) {
+                                if (configs.length == 0) {
+                                    self.seedData();
+                                }
+                            });
                 });
             },
-            seedData: function() {
+            seedData: function () {
                 var self = this;
                 var itemsWithConstraints = [];
                 for (var key in self.models) {
                     var name = key;
                     var plural = MaModel[name].tableName;
                     self.db[plural].addMany(MaSeedData[name]);
-                };
-                self.db.saveChanges(function() {
+                }
+                ;
+                self.db.saveChanges(function () {
                     window.location = window.document.URL;
                 });
             },
-            getJSON: function(name) {
+            getJSON: function (name) {
                 var ent = $data.Entity.extend(name, MaModel[name].model);
                 return new ent().toJSON();
             },
-            validateJSON: function(name, model) {
+            validateJSON: function (name, model) {
                 var ent = $data.Entity.extend(name, MaModel[name].model);
                 var jayEntity = new ent();
                 for (var key in model) {
-                    if(model[key] == "")
+                    if (model[key] == "")
                         model[key] = null;
                     jayEntity[key] = model[key];
                 }
@@ -5129,7 +5132,7 @@ Polymer('core-menu');;
                     errors: errors
                 };
             },
-            resultsToJSON: function(items) {
+            resultsToJSON: function (items) {
                 var returnItems = [];
                 for (var key in items) {
                     if (items[key].hasOwnProperty("initData")) {
@@ -6709,8 +6712,12 @@ Polymer('core-transition-pages',{
                             updateMails = true;
                         }
                     }
-                    if (updateTasks) { self.getTasks(); }
-                    if (updateMails) { self.getMails(); }
+                    if (updateTasks) {
+                        self.getTasks();
+                    }
+                    if (updateMails) {
+                        self.getMails();
+                    }
                 });
             },
             getUserCallback: function (user, self) {
@@ -6949,7 +6956,7 @@ Polymer('core-transition-pages',{
                 'item.checked': 'checkedChanged'
             },
             setAsComplete: function (event, details, target) {
-                this.$.repo.setAsComplete(this.setAsCompleteCallback, target.dataset.itemid, this);
+                this.$.repo.setAsComplete(this.setAsCompleteCallback, target.getAttribute('data-itemid'), this);
             },
             setAsCompleteCallback: function (success, errors, self, item) {
                 if (success) {
@@ -7312,7 +7319,10 @@ Polymer('paper-dialog');;
                     bound: false,
                     showTime:true
                 });
-                picker.setMoment(moment().dayOfYear(366));
+                var diff = new Date() - new Date(new Date().getFullYear(), 0, 0);
+                var oneDay = 1000 * 60 * 60 * 24;
+                var day = Math.floor(diff / oneDay);
+                picker.setMoment(moment().dayOfYear(day));
             }
         });
     ;
@@ -7320,9 +7330,10 @@ Polymer('paper-dialog');;
         Polymer('task-popup', {
             newItemModel: {},
             createTask: function () {
-                this.newItemModel.Deadline = new Date(this.$.pickDeadline.inputVal);
-                console.log(this.$.pickDeadline.inputVal);
-                console.log(this.newItemModel.Deadline);
+                var date = this.$.pickDeadline.inputVal.split(' ')[0].split("-");
+                var time = this.$.pickDeadline.inputVal.split(' ')[1].split(":");
+                var year = date[0];var month = date[1];var day = date[2];var hour = time[0];var minute = time[1];var second=time[2];
+                this.newItemModel.Deadline = new Date(year,month,day,hour,minute,second,0);
                 this.$.repo.createTask(this.createTaskCallback, this.newItemModel, this);
             },
             createTaskCallback: function (success, errors, self) {
@@ -8055,7 +8066,7 @@ Polymer('paper-dialog');;
             },
             showDetails: function (event, details, target) {
                 var animation = this.$.pageAnimation;
-                var itemId = target.dataset.itemid;
+                var itemId = target.getAttribute('data-itemid');
                 var willHide = false;
                 if (this.item.selected) {
                     willHide = true;

@@ -42,18 +42,21 @@
                 self.$.repo.context.db.Notifications.addMany([notification]);
                 self.$.repo.context.db.saveChanges();
             },
-            getNotifications: function (callback, selfCallback) {
+            getNotifications: function (callback, polling, selfCallback) {
                 var self = this;
                 self.$.repo.context.db.Notifications.filter(function (notification) {
                     notification.User__Id == this.Id && notification.ReadDate == null
                 }, this.userSession).toArray(function (notifications) {
-                    for (var i = 0; i <= notifications.length - 1; i++) {
-                        self.$.repo.context.db.Notifications.attach(notifications[i]);
-                        notifications[i].ReadDate = (new Date()).getTime();
+                    if (notifications.length > 0) {
+                        setTimeout(function () {
+                            for (var i = 0; i <= notifications.length - 1; i++) {
+                                self.$.repo.context.db.Notifications.attach(notifications[i]);
+                                notifications[i].ReadDate = (new Date()).getTime();
+                            }
+                            self.$.repo.context.db.saveChanges();
+                        }, (polling));
                     }
-                    self.$.repo.context.db.saveChanges(function () {
-                        callback(notifications, selfCallback);
-                    });
+                    callback(notifications, selfCallback);
                 });
             }
         });

@@ -1239,6 +1239,26 @@ html/deep/ a{
     text-decoration: none;
     color:inherit;
 }</style>
+<style shim-shadowdom="">html /deep/ .newItemPanel paper-input, html /deep/ .newItemPanel pickaday-element::shadow paper-input {
+    width: 100%;
+    display: block;
+}
+
+html /deep/ .newItemPanel paper-input /deep/ paper-input,
+html /deep/ .newItemPanel paper-input /deep/ .label,
+html /deep/ .newItemPanel paper-input /deep/ input {
+    margin: 0;
+    padding: 0;
+}
+
+html /deep/ .newItemPanel textarea {
+    padding: 5px !important;
+    border: 1px solid #898989 !important;
+    width: 100% !important;
+    display: block !important;
+    min-width: 200px;
+    min-height: 100px;
+}</style>
 
 <script src="elements/ma-utils/ma-filters.js"></script>
 
@@ -3048,8 +3068,8 @@ core-icon {
     <!--
     <script src="jaydata/jaydatamodules/deferred.js"></script>
     -->
-<script src="elements/ma-data-context/jaydata/jaydata.min.js"></script>
-<script src="elements/ma-data-context/Models.js"></script>
+    <script src="elements/ma-data-context/jaydata/jaydata.min.js"></script>
+    <script src="elements/ma-data-context/Models.js"></script>
 
     <!--
     <script src="models/Task.js"></script>
@@ -4548,19 +4568,17 @@ polyfill-next-selector { content: ':host > *:not(.core-selected):not([animate])'
         <task-repo id="taskRepo"></task-repo>
         <my-profile-repo id="myProfileRepo"></my-profile-repo>
         <ma-grid>
-            <ma-grid-item large="12" medium="12" small="24">
+            <ma-grid-item large="8" medium="8" small="24">
                 <ma-box class="content-color">
                     <div head="" class="teal">Welcome {{model.profile.FirstName}}!</div>
                     <div body="">
                         <paper-input floatinglabel="" disabled="" label="Email" value="{{model.profile.Email}}"></paper-input>
                         <paper-input floatinglabel="" disabled="" label="First Name" value="{{model.profile.FirstName}}"></paper-input>
                         <paper-input floatinglabel="" disabled="" label="Last Name" value="{{model.profile.LastName}}"></paper-input>
-                        <paper-input floatinglabel="" disabled="" label="Country" value="{{model.profile.UserAddress.Country}}"></paper-input>
-                        <paper-input floatinglabel="" disabled="" label="Zip Code" value="{{model.profile.UserAddress.ZipCode}}"></paper-input>
                     </div>
                 </ma-box>
             </ma-grid-item>
-            <ma-grid-item large="12" medium="12" small="24">
+            <ma-grid-item large="16" medium="16" small="24">
                 <ma-box class="content-color">
                     <div head="" class="light-blue">Latest Tasks</div>
                     <div body="">
@@ -4573,19 +4591,19 @@ polyfill-next-selector { content: ':host > *:not(.core-selected):not([animate])'
                                     <td>Completed</td>
                                 </tr>
                                 </thead>
-                                <template repeat="{{item in model.tasks}}">
-                                    <tr>
-                                        <td>{{item.Details}}</td>
-                                        <td>{{item.DeadLine|maDateView}}</td>
-                                        <td>{{item.CompletedDateTime|maDateView}}</td>
-                                    </tr>
-                                </template>
+                                <tbody>
+                                <tr template="" repeat="{{item in model.tasks}}">
+                                    <td>{{item.Details}}</td>
+                                    <td>{{item.DeadLine|maDateView}}</td>
+                                    <td>{{item.CompletedDateTime|maDateView}}</td>
+                                </tr>
+                                </tbody>
                             </table>
                         </ma-table>
                     </div>
                 </ma-box>
             </ma-grid-item>
-            <ma-grid-item large="12" medium="12" small="24">
+            <ma-grid-item large="24" medium="24" small="24">
                 <ma-box class="content-color">
                     <div head="" class="light-green">Latest Mails</div>
                     <div body="">
@@ -4597,12 +4615,12 @@ polyfill-next-selector { content: ':host > *:not(.core-selected):not([animate])'
                                     <td>Title</td>
                                 </tr>
                                 </thead>
-                                <template repeat="{{item in model.mails}}">
-                                    <tr>
-                                        <td>{{item.Sender}}</td>
-                                        <td>{{item.Title}}</td>
-                                    </tr>
-                                </template>
+                                <tbody>
+                                <tr template="" repeat="{{item in model.mails}}">
+                                    <td>{{item.Sender}}</td>
+                                    <td>{{item.Title}}</td>
+                                </tr>
+                                </tbody>
                             </table>
                         </ma-table>
                     </div>
@@ -5638,29 +5656,7 @@ http://nicolasgallagher.com/micro-clearfix-hack/
 <polymer-element name="task-popup" assetpath="pages/tasks/">
     <template>
         <task-repo id="repo"></task-repo>
-        <paper-dialog backdrop="" id="newItemPopup" heading="New Task">
-            <style>
-                paper-input, pickaday-element::shadow paper-input {
-                    width: 100%;
-                    display: block;
-                }
-
-                paper-input /deep/ paper-input,
-                paper-input /deep/ .label,
-                paper-input /deep/ input {
-                    margin: 0;
-                    padding: 0;
-                }
-
-                paper-dialog /deep/ textarea {
-                    padding: 5px !important;
-                    border: 1px solid #898989 !important;
-                    width: 100% !important;
-                    display: block !important;
-                    min-width: 200px;
-                    min-height: 100px;
-                }
-            </style>
+        <paper-dialog backdrop="" id="newItemPopup" heading="New Task" class="newItemPanel">
             <paper-input type="text" label="Task" value="{{newItemModel.Details}}"></paper-input>
             <pickaday-element label="Deadline" id="pickDeadline"></pickaday-element>
             <p>
@@ -5793,27 +5789,7 @@ the animation.
 <polymer-element name="mail-popup" assetpath="pages/mails/">
     <template>
         <mail-repo id="repo"></mail-repo>
-        <paper-dialog backdrop="" id="newItemPopup" heading="New Mail">
-            <style>
-                paper-input {
-                    width: 100%;
-                    display: block;
-                }
-                paper-input /deep/ paper-input,
-                paper-input /deep/ .label,
-                paper-input /deep/ input {
-                    margin: 0;
-                    padding: 0;
-                }
-                textarea {
-                    padding: 5px !important;
-                    border: 1px solid #898989 !important;
-                    width: 100% !important;
-                    display: block !important;
-                    min-width: 200px;
-                    min-height: 100px;
-                }
-            </style>
+        <paper-dialog backdrop="" id="newItemPopup" heading="New Mail" class="newItemPanel">
             <paper-input type="text" label="Receiver" value="{{newItemModel.Receiver}}"></paper-input>
             <paper-input type="text" label="Title" value="{{newItemModel.Title}}"></paper-input>
             <p>
@@ -5928,11 +5904,6 @@ the animation.
     <template>
         <style>
             .main-container {
-                padding: 10px;
-            }
-            paper-shadow,
-            ::shadow paper-shadow {
-                margin: 10px;
                 padding: 10px;
             }
             core-animated-pages {

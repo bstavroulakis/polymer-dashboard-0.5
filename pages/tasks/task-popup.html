@@ -6,29 +6,7 @@
 <polymer-element name="task-popup">
     <template>
         <task-repo id="repo"></task-repo>
-        <paper-dialog backdrop id="newItemPopup" heading="New Task">
-            <style>
-                paper-input, pickaday-element::shadow paper-input {
-                    width: 100%;
-                    display: block;
-                }
-
-                paper-input /deep/ paper-input,
-                paper-input /deep/ .label,
-                paper-input /deep/ input {
-                    margin: 0;
-                    padding: 0;
-                }
-
-                paper-dialog /deep/ textarea {
-                    padding: 5px !important;
-                    border: 1px solid #898989 !important;
-                    width: 100% !important;
-                    display: block !important;
-                    min-width: 200px;
-                    min-height: 100px;
-                }
-            </style>
+        <paper-dialog backdrop id="newItemPopup" heading="New Task" class="newItemPanel">
             <paper-input type="text" label="Task" value="{{newItemModel.Details}}"></paper-input>
             <pickaday-element label="Deadline" id="pickDeadline"></pickaday-element>
             <p>
@@ -42,9 +20,10 @@
         Polymer('task-popup', {
             newItemModel: {},
             createTask: function () {
-                this.newItemModel.Deadline = new Date(this.$.pickDeadline.inputVal);
-                console.log(this.$.pickDeadline.inputVal);
-                console.log(this.newItemModel.Deadline);
+                var date = this.$.pickDeadline.inputVal.split(' ')[0].split("-");
+                var time = this.$.pickDeadline.inputVal.split(' ')[1].split(":");
+                var year = date[0];var month = date[1];var day = date[2];var hour = time[0];var minute = time[1];var second=time[2];
+                this.newItemModel.Deadline = new Date(year,month,day,hour,minute,second,0);
                 this.$.repo.createTask(this.createTaskCallback, this.newItemModel, this);
             },
             createTaskCallback: function (success, errors, self) {

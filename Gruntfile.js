@@ -23,8 +23,9 @@ module.exports = function (grunt) {
                     'elements/ma-data-context/jaydata/jaydata.min.js': [
                         'elements/ma-data-context/jaydata/jaydatamodules/q.js',
                         'elements/ma-data-context/jaydata/jaydata.js',
-                        'elements/ma-data-context/jaydata/jaydataproviders/IndexedDbProvider.js',
-                        'elements/ma-data-context/jaydata/jaydataproviders/InMemoryProvider.js',
+                        'elements/ma-data-context/jaydata/jaydataproviders/SqlLiteProvider.min.js',
+                        'elements/ma-data-context/jaydata/jaydataproviders/IndexedDbProvider.min.js',
+                        'elements/ma-data-context/jaydata/jaydataproviders/InMemoryProvider.min.js',
                         'elements/ma-data-context/jaydata/jaydatamodules/deferred.js',
                         'elements/ma-data-context/jaydata/jaydatamodules/qDeferred.js'
                     ],

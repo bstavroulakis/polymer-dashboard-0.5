@@ -4,13 +4,12 @@
         <ma-box id="maBox{{item.Id}}" class="content-color" boxFit="true">
             <div body>
                 <ma-grid>
-                    <ma-grid-item large="1" medium="1" small="1">
-                        <paper-checkbox class="item-checkbox" type="checkbox" id="checked"
-                                        on-tap="{{checkboxSelected}}"></paper-checkbox>
-                    </ma-grid-item>
                     <ma-grid-item large="23" medium="23" small="23">
                         <ma-grid>
+
                             <ma-grid-item large="9" medium="12" small="24">
+                                <paper-checkbox class="item-checkbox" type="checkbox" id="checked"
+                                                on-tap="{{checkboxSelected}}"></paper-checkbox>
                                 {{item.Details}}
                             </ma-grid-item>
                             <ma-grid-item large="11" medium="12" small="24">
@@ -41,7 +40,7 @@
                 'item.checked': 'checkedChanged'
             },
             setAsComplete: function (event, details, target) {
-                this.$.repo.setAsComplete(this.setAsCompleteCallback, target.dataset.itemid, this);
+                this.$.repo.setAsComplete(this.setAsCompleteCallback, target.getAttribute('data-itemid'), this);
             },
             setAsCompleteCallback: function (success, errors, self, item) {
                 if (success) {

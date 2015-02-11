@@ -1,0 +1,20 @@
+html /deep/ .newItemPanel paper-input, html /deep/ .newItemPanel pickaday-element::shadow paper-input {
+    width: 100%;
+    display: block;
+}
+
+html /deep/ .newItemPanel paper-input /deep/ paper-input,
+html /deep/ .newItemPanel paper-input /deep/ .label,
+html /deep/ .newItemPanel paper-input /deep/ input {
+    margin: 0;
+    padding: 0;
+}
+
+html /deep/ .newItemPanel textarea {
+    padding: 5px !important;
+    border: 1px solid #898989 !important;
+    width: 100% !important;
+    display: block !important;
+    min-width: 200px;
+    min-height: 100px;
+}

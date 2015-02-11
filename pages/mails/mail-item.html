@@ -10,15 +10,10 @@
             <div body class="{{{'divider-color':true,'selected':item.selected} | tokenList}}">
                 <ma-grid class="item-header" data-itemid="{{item.Id}}" on-tap="{{showDetails}}">
                     <ma-grid-item large="24" medium="24" small="24">
-                        <ma-grid>
-                            <ma-grid-item large="1" medium="1" small="1">
                                 <paper-checkbox class="item-checkbox" type="checkbox" id="checked"
                                                 on-tap="{{checkboxSelected}}"></paper-checkbox>
-                            </ma-grid-item>
-                            <ma-grid-item large="23" medium="23" small="23">
                                 <div class="item-sender">{{item.Sender}}</div>
                                 <div class="item-date">{{item.SentDate | maDateView}}</div>
-                            </ma-grid-item>
                         </ma-grid>
                     </ma-grid-item>
                     <ma-grid-item large="24" medium="24" small="24">
@@ -74,7 +69,7 @@
             },
             showDetails: function (event, details, target) {
                 var animation = this.$.pageAnimation;
-                var itemId = target.dataset.itemid;
+                var itemId = target.getAttribute('data-itemid');
                 var willHide = false;
                 if (this.item.selected) {
                     willHide = true;
