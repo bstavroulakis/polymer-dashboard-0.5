@@ -1,6 +1,10 @@
+<link rel="import" href="context-loading-screen.html">
 <polymer-element name="ma-data-context">
     <template>
         <ma-utils id="utils"></ma-utils>
+        <template if="{{installing}}">
+            <context-loading-screen></context-loading-screen>
+        </template>
     </template>
     <!--
     <script src="jaydata/jaydatamodules/q.js"></script>
@@ -49,10 +53,12 @@
                 Notification: "Notification",
                 NotificationType: "NotificationType"
             },
+            installing: false,
             firstRun: false,
             entities: [],
             ready: function () {
                 var self = this;
+                self.installing = true;
                 var opts = {};
                 for (var key in this.models) {
                     var name = this.models[key];
@@ -77,6 +83,7 @@
                                 if (configs.length == 0) {
                                     self.seedData();
                                 }
+                                self.installing = false;
                             });
                 });
             },
@@ -90,8 +97,7 @@
                 }
                 ;
                 self.db.saveChanges(function () {
-                    console.log(self.$.utils.getBaseUrl());
-                    window.location.href = self.$.utils.getBaseUrl();
+                    window.location.href = window.document.URL.split('#')[0];
                 });
             },
             getJSON: function (name) {

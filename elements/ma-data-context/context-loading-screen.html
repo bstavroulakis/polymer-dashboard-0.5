@@ -1,0 +1,48 @@
+<polymer-element name="context-loading-screen">
+
+    <template>
+        <style>
+            .dark-background{
+                background-color:#898989;
+                opacity:0.8;
+            }
+            .loading-window{
+                position:fixed;
+                z-index:1000;
+                width:100%;
+                height:100%;
+                top:0px;
+                left:0px;
+            }
+            .loading-message{
+                text-align:center;
+                display:block;
+                width:100%;
+            }
+            .loading-message-inner{
+                background-color:#ffffff;
+                display:inline-block;
+                padding:1em 2em;
+                margin-top:2em;
+                font-size:140%;
+            }
+        </style>
+        <div class="loading-window dark-background"></div>
+        <div class="loading-window">
+            <div class="loading-message">
+                <div class="loading-message-inner">
+                    Installing Database...<br/>
+                    <img src="ajax-loader.gif">
+                </div>
+            </div>
+        </div>
+    </template>
+
+
+    <script>
+        Polymer('context-loading-screen',{
+
+                }
+        );
+    </script>
+</polymer-element>
