@@ -7954,9 +7954,6 @@ polyfill-next-selector { content: '#tabsContent > *:not(#selectionBar)'; }
             .auth-btn{
                 margin-top:5px;
             }
-            paper-input::shadow paper-input-decorator{
-                padding-top:0px;
-            }
             paper-tab{
                 background-color:#f9f9f9;
                 color:#898989;
@@ -8016,7 +8013,7 @@ polyfill-next-selector { content: '#tabsContent > *:not(#selectionBar)'; }
             </ma-page-dialog>
 
         </core-animated-pages>
-        <paper-toast id="toastError" text=""></paper-toast>
+        <paper-toast id="toastError" text="" autoclosedisabled=""></paper-toast>
     </template>
     <script>
         Polymer('auth-dialog', {
