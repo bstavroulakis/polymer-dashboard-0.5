@@ -1,4 +1,4 @@
-(function(MaModel) {
+(function (MaModel) {
 
     var asdadasdsd = "private";
 
@@ -14,7 +14,8 @@
                 type: String,
                 required: true,
                 maxLength: 200,
-                error: "Email is required. Max length 200 characters."
+                error: "Email is empty or invalid. Max length 200 characters.",
+                regex: '^[^@]+@[^@]+\.[^@]+$'
             },
             Password: {
                 type: String,
@@ -51,21 +52,21 @@
                 maxLength: 6
             }
             /*,
-            Tasks: {
-                type: Array,
-                elementType: "Task",
-                inverseProperty: "User"
-            },
-            MailUsers:{
-                type:"Array",
-                elementType:"MailUser",
-                inverseProperty:"User"
-            },
-            Notifications:{
-                type:"Array",
-                elementType:"Notification",
-                inverseProperty:"User"
-            }*/
+             Tasks: {
+             type: Array,
+             elementType: "Task",
+             inverseProperty: "User"
+             },
+             MailUsers:{
+             type:"Array",
+             elementType:"MailUser",
+             inverseProperty:"User"
+             },
+             Notifications:{
+             type:"Array",
+             elementType:"Notification",
+             inverseProperty:"User"
+             }*/
         }
     };
 

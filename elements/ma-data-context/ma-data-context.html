@@ -108,6 +108,7 @@
                 }
                 var isValid = jayEntity.isValid();
                 var errors = [];
+                console.log(jayEntity.ValidationErrors);
                 if (jayEntity.ValidationErrors != null && jayEntity.ValidationErrors.length > 0) {
                     for (var key in jayEntity.ValidationErrors) {
                         errors.push({

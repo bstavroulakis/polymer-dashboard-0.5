@@ -4462,7 +4462,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             },
             getBaseUrl: function () {
                 var re = /(.*\/)(.*\.html)/;
-                var baseURL = document.URL;
+                var baseURL = document.URL.split('#')[0];
                 var trimmed = baseURL.split(re)[1];
                 if (trimmed != null)
                     trimmed = trimmed.split('pages/')[0];
@@ -5859,6 +5859,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 }
                 var isValid = jayEntity.isValid();
                 var errors = [];
+                console.log(jayEntity.ValidationErrors);
                 if (jayEntity.ValidationErrors != null && jayEntity.ValidationErrors.length > 0) {
                     for (var key in jayEntity.ValidationErrors) {
                         errors.push({
