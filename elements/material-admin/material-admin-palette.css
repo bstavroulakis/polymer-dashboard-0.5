@@ -5,7 +5,7 @@
 .light-primary-color, html /deep/ .light-primary-color { background-color: rgb( 96, 125, 139 ); color:#ffffff; }
 .accent-color, html /deep/ .accent-color { background: #FF5252; color:#ffffff; }
 body, .neutral-color,html /deep/ .neutral-color{ background: #ececec; }
-.content-color, html /deep/ .content-color { background:#ffffff; }
+.content-color, html /deep/ .content-color, html /deep/ #drawer { background:#ffffff; }
 .divider-color, html /deep/ .divider-color { border-bottom:1px solid #e5e5e5  ; }
 html /deep/ .border-color, {border:1px solid #e5e5e5; }
 .text-primary-color, html /deep/ .text-primary-color { color: #FFFFFF; }

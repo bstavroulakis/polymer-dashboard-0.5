@@ -6,7 +6,7 @@ module.exports = function (grunt) {
         vulcanize: {
             default: {
                 options: {
-                    csp: true
+
                 },
                 files: {
                     'index.html': 'dev.html',

@@ -10,7 +10,6 @@
             core-icon {
                 margin-right: 0.5em;
             }
-
             core-icon.right {
                 margin-left: 0.5em;
                 margin-right: 0;
@@ -26,6 +25,7 @@
                 <h1>{{page.Label}}</h1>
             </div>
             <div>
+                <div  style="display:inline-block;">
                 <ma-dropdown-button id="mailOption" icon="mail">
                     <paper-dropdown class="no-padding" halign="right">
                         <div class="menu primary-text-color">
@@ -53,8 +53,7 @@
                         <div class="menu primary-text-color">
                             <paper-item>
                                 <a href="{{'#my-profile' | toBaseUrl}}">
-                                    <core-icon icon="social:person"></core-icon>
-                                    My Profile
+                                    <core-icon icon="social:person"></core-icon>Profile
                                 </a>
                             </paper-item>
                             <paper-item on-tap="{{logout}}">
@@ -64,6 +63,7 @@
                         </div>
                     </paper-dropdown>
                 </ma-dropdown-button>
+                </div>
             </div>
         </div>
         <ma-real-time-client id="realTimeClient"></ma-real-time-client>

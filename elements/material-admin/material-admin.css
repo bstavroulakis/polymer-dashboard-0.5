@@ -7,7 +7,7 @@ html /deep/ * {
 }
 body , body /deep/ *{
   font-family: "RobotoDraft", Helvetica, Arial, sans-serif;
-    word-wrap:break-word;
+
 }
 
 body{
