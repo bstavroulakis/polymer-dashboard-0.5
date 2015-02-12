@@ -8,36 +8,37 @@
 <link rel="import" href="../../bower_components/core-icon-button/core-icon-button.html">
 <link rel="import" href="../../bower_components/core-icons/social-icons.html">
 <link rel="import" href="../../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../../bower_components/core-media-query/core-media-query.html">
 
-<polymer-element name="ma-drawer" extends="core-drawer-panel">
+<polymer-element name="ma-drawer" attributes="drawerWidth, responsiveWidth">
     <template>
         <style>
             core-header-panel /deep/ #dropShadow {
                 box-shadow: none;
             }
 
-            .fancy-fab .drawer-fab {
+            .drawer-opened .drawer-fab {
                 position: absolute;
                 z-index: 1;
-                left: -25px;
-                top: 10px;
+                left: -1.3em;
+                top: 0.5em;
             }
 
-            .drawer-opened {
+            .drawer-opened [drawer] {
                 box-shadow: 7px 0 10px rgba(0, 0, 0, 0.19);
             }
 
-            .drawer-fab-pad {
-                padding-right: 5px;
-            }
-
             .logo {
-                padding: 8px;
-                margin-bottom: 1px;
+                padding: 0.3em;
             }
         </style>
-        <core-drawer-panel id="drawerPanel" rightDrawer="{{rightDrawer}}" drawerWidth="{{drawerWidth}}">
-            <div drawer class="{{ {'drawer-opened':drawerOpened && !mobileMode} | tokenList }}">
+        <core-media-query query="max-width: {{responsiveWidth}}" queryMatches="{{mobileMode}}"></core-media-query>
+        <core-drawer-panel id="drawerPanel"
+                           rightDrawer="{{rightDrawer}}"
+                           responsiveWidth="{{responsiveWidth}}"
+                           drawerWidth="{{drawerWidth}}"
+                           class="{{ {'drawer-opened': (!mobileMode && !$.drawerPanel.narrow)} | tokenList }}">
+            <div drawer>
                 <h2 id="mainHeader" class="logo">Material Admin</h2>
 
                 <div>
@@ -45,13 +46,12 @@
                 </div>
             </div>
             <core-header-panel main navigation>
-                <core-toolbar
-                        class="{{ {'fancy-fab':(drawerOpened && !mobileMode && !scrimDrawerOpened), 'default-primary-color':true, 'text-primary-color':true} | tokenList }}">
+                <core-toolbar class="default-primary-color">
                     <paper-fab class="drawer-fab"
-                               mini icon="{{(drawerOpened && !mobileMode && !scrimDrawerOpened)?'arrow-back':'menu'}}"
-                               on-tap="{{togglePanel}}"></paper-fab>
-                    <template if="{{drawerOpened && !mobileMode && !scrimDrawerOpened}}">
-                        <div class="drawer-fab-pad"></div>
+                               mini icon="{{(!mobileMode && !$.drawerPanel.narrow)?'arrow-back':'menu'}}"
+                               on-tap="{{togglePanelFab}}"></paper-fab>
+                    <template if="{{!mobileMode && !$.drawerPanel.narrow}}">
+                        <div class="drawer-fab-spacing"></div>
                     </template>
                     <content select="material-admin-header"></content>
                 </core-toolbar>
@@ -61,62 +61,30 @@
     </template>
     <script>
         Polymer('ma-drawer', {
-            mobileMode: false,
-            drawerOpened: true,
-            scrimDrawerOpened: false,
-            narrowChanged: function () {
-                var selfObj = this;
-                this.async(function () {
-                    if (this.narrow) {
-                        this.mobileMode = true;
-                        this.drawerOpened = false;
-                    }
-                    else {
-                        this.mobileMode = false;
-                        this.drawerOpened = true;
-                    }
-                    this.scrimDrawerOpened = false;
-                    selfObj.hideShowScrimDisplay(false);
-                }, 0);
-            },
             ready: function () {
-                var selfObj = this;
+                var self = this;
+                this.responsiveWidth = this.$.drawerPanel.responsiveWidth;
                 this.$.drawerPanel.addEventListener('core-drawer-panel-trackOpen', function (el) {
-                    if (!selfObj.drawerOpened) {
-                        selfObj.hideShowScrimDisplay(false);
-                        selfObj.scrimDrawerOpened = true;
-                    }
+                    self.hideShowScrimDisplay(false);
                 });
-                this.$.drawerPanel.addEventListener('core-drawer-panel-trackClosed', function (el) {
-                    if (!selfObj.drawerOpened) {
-                        selfObj.scrimDrawerOpened = false;
-                    }
-                });
-                this.$.drawerPanel.shadowRoot.querySelector("#scrim").addEventListener('tap', function (el) {
-                    if (!selfObj.drawerOpened) {
-                        selfObj.scrimDrawerOpened = false;
-                        selfObj.$.drawerPanel.closeDrawer();
-                    }
-                });
-                if (this.$.drawerPanel.narrow) {
-                    this.drawerOpened = false;
-                    this.mobileMode = true;
-                }
-                this.hideShowScrimDisplay(true);
             },
-            togglePanel: function () {
-                this.drawerOpened = !this.drawerOpened;
-                if (this.mobileMode) {
-                    this.$.drawerPanel.openDrawer();
-                    this.hideShowScrimDisplay(false);
-                }
-                else {
+            mobileMode: false,
+            mobileModeChanged: function () {
+                this.hideShowScrimDisplay(!this.mobileMode);
+                this.$.drawerPanel.narrow = this.mobileMode;
+                this.resetDrawerSelected();
+            },
+            togglePanelFab: function () {
+                if (!this.mobileMode) {
                     this.$.drawerPanel.narrow = !this.$.drawerPanel.narrow;
-                    this.hideShowScrimDisplay(true);
-                    this.$.drawerPanel.closeDrawer();
+                    this.resetDrawerSelected();
+                } else {
+                    this.$.drawerPanel.openDrawer();
                 }
-            }
-            ,
+            },
+            resetDrawerSelected: function () {
+                this.$.drawerPanel.selected = this.mobileMode ? 'drawer' : 'main';
+            },
             hideShowScrimDisplay: function (hide) {
                 if (hide) {
                     this.$.drawerPanel.shadowRoot.querySelector("#scrim").style.display = 'none';
@@ -124,7 +92,6 @@
                     this.$.drawerPanel.shadowRoot.querySelector("#scrim").style.display = 'block';
                 }
             }
-            ,
         })
         ;
     </script>
