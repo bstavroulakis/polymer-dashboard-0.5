@@ -90,7 +90,8 @@
                 }
                 ;
                 self.db.saveChanges(function () {
-                    window.location = window.document.URL;
+                    console.log(self.$.utils.getBaseUrl());
+                    window.location.href = self.$.utils.getBaseUrl();
                 });
             },
             getJSON: function (name) {

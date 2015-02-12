@@ -33,7 +33,6 @@
                     callback(false, validation.errors, selfCallback);
                     return;
                 }
-                console.log(updatedUser);
                 self.saveUserCallback(updatedUser, callback, selfCallback)
             },
             saveUserCallback: function (updatedUser, callback, selfCallback) {

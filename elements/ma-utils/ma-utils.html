@@ -18,7 +18,7 @@
             },
             getBaseUrl: function () {
                 var re = /(.*\/)(.*\.html)/;
-                var baseURL = document.URL;
+                var baseURL = document.URL.split('#')[0];
                 var trimmed = baseURL.split(re)[1];
                 if (trimmed != null)
                     trimmed = trimmed.split('pages/')[0];

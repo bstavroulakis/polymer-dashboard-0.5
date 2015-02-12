@@ -14,13 +14,13 @@
                 type: String,
                 required: true,
                 maxLength: 200,
-                error: "Email is required"
+                error: "Email is required. Max length 200 characters."
             },
             Password: {
                 type: String,
                 required: true,
                 maxLength: 50,
-                error: "Password is required"
+                error: "Password is required. Max length 50 characters."
             },
             FirstName: {
                 type: String,

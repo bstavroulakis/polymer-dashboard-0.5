@@ -11,7 +11,8 @@
             Details: {
                 type: String,
                 required: true,
-                maxLength: 200
+                maxLength: 200,
+                error:"Task details are required. Max length 200 characters."
             },
             DeadLine: {
                 type: "datetime"

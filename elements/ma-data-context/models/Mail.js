@@ -11,12 +11,14 @@
             Title: {
                 type: String,
                 required: true,
-                maxLength: 100
+                maxLength: 100,
+                error:"Email Title is required. Max length 100 characters."
             },
             Message: {
                 type: String,
                 required: true,
-                maxLength: 300
+                maxLength: 300,
+                error:"Email Message is required. Max length 100 characters."
             },
             SentDate:{
                 type: "datetime"

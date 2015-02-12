@@ -5841,7 +5841,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 }
                 ;
                 self.db.saveChanges(function () {
-                    window.location = window.document.URL;
+                    console.log(self.$.utils.getBaseUrl());
+                    window.location.href = self.$.utils.getBaseUrl();
                 });
             },
             getJSON: function (name) {
