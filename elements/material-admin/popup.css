@@ -18,7 +18,3 @@ html /deep/ .newItemPanel textarea {
     min-width: 200px;
     min-height: 100px;
 }
-
-html /deep/ paper-input::shadow paper-input-decorator{
-    padding-top:0px;
-}
