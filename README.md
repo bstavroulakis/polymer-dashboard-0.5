@@ -1,4 +1,4 @@
-# polymer-dashboard
+# Polymer Dashboard using Material Design
 
 If you want to go over the “Web Components” post series you can start here => http://bstavroulakis.com/blog/web/web-components-html-templates/
 
