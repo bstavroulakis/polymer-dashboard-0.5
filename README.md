@@ -1,10 +1,6 @@
 # Polymer Dashboard using Material Design
 
-If you want to go over the “Web Components” post series you can start here => http://bstavroulakis.com/blog/web/web-components-html-templates/
-
-I’m very happy to be in the process of putting together a new Pluralsight course with the title “An end to end application using Polymer and Material Design”. In this course we’ll create a Web Application with Polymer.js using the Material Design principles. It will also have a front-end database using jaydata.js. If you’re new to Material Design you can check it out here =>  http://www.google.com/design/
-
-To cover Polymer.js we’ll construct a Polymer Dashboard which will have:
+This project is a Polymer Dashboard with Material Design and consists of the following parts:
 
 ![alt tag](http://bstavroulakis.com/blog/wp-content/uploads/2015/02/materialAdmin.jpg)
 
