@@ -19,7 +19,7 @@ If you want to checkout the Demo of the “Polymer Dashboard” you can visit th
 - Username: bstavroulakis@gmail.com
 - Password: 1234
 
-Or you can checkout the project’s github page => https://github.com/bstavroulakis/polymer-dashboard and Developer version (non-vulcanized) at the following links
+Or you can checkout the project’s github page => https://github.com/bstavroulakis/polymer-dashboard-0.5 and Developer version (non-vulcanized) at the following links
 
 - http://bstavroulakis.com/demos/polymer-dashboard/pages/auth/auth-dev.html
 - http://bstavroulakis.com/demos/polymer-dashboard/dev.html
