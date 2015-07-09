@@ -1,4 +1,4 @@
-# Polymer Dashboard using Material Design
+# Polymer 0.5 Dashboard using Material Design
 
 This project is a Polymer Dashboard with Material Design and consists of the following parts:
 
